@@ -1,0 +1,4 @@
+services:
+  shop_email:
+    container_name: shop_email
+    build: .
