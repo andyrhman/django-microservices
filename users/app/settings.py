@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-g=sxtxaw%la=8x05h__m#br_hs)bmjyl=eeifbg9i$c0g@p*c1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     'core',
+    'authorization'
 ]
 
 MIDDLEWARE = [
@@ -90,9 +91,22 @@ DATABASES = {
         'OPTIONS': {
             'sslmode': 'require',  
         },
+    },
+    'old_users': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('OLD_POSTGRES_DB'),
+        'USER': config('POSTGRES_USER'),
+        'PASSWORD': config('POSTGRES_PASSWORD'),
+        'HOST': config('POSTGRES_HOST'),
+        'PORT': config('POSTGRES_PORT'),
+        'OPTIONS': {
+            'sslmode': 'require',  
+        },
     }
 }
 
+
+DATABASE_ROUTERS = ['core.db_routers.OldUserRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -119,12 +133,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-#     'EXCEPTION_HANDLER': 'core.exception_handler.custom_exception_handler',
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

@@ -16,7 +16,6 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.is_admin = False
         user.is_staff = False
-        user.is_ambassador = False
         user.save(using=self._db)
         return user
 
@@ -31,12 +30,10 @@ class UserManager(BaseUserManager):
         user = self.model(email=self.normalize_email(email), username=username)
         user.set_password(password)
         user.is_admin = True
-        user.is_ambassador = False
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
         return user
-
 
 class User(AbstractUser):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
@@ -54,3 +51,11 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ["email"]
 
     objects = UserManager()
+    
+class Token(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
+    email = models.EmailField()
+    user = models.ForeignKey(User, null=True, related_name='token', on_delete=models.SET_NULL)
+    token = models.CharField(max_length=255, unique=True)
+    expiresAt = models.DateTimeField()
+    used = models.BooleanField(default=False)   
