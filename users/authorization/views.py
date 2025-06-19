@@ -66,17 +66,14 @@ class LoginAPIView(APIView):
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        scope = "user" if "api/user" in request.path else "admin"
-
-        if user.is_user and scope == "admin":
+        if user.is_user and data['scope'] == "admin":
             raise exceptions.AuthenticationFailed("Unauthorized")
 
-        token = JWTAuthentication.generate_jwt(user.id, scope)
-        response = Response()
-        response.set_cookie(key="user_session", value=token, httponly=True)
-        response.data = {"message": "Successfully logged in!"}
+        token = JWTAuthentication.generate_jwt(user.id, data['scope'])
 
-        return response
+        return Response({
+            'jwt': token
+        })
 
 
 class UserAPIView(APIView):

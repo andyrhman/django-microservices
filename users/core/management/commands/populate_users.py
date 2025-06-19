@@ -18,6 +18,7 @@ class Command(BaseCommand):
                 email=old.email,
                 username=old.username,
                 is_user=old.is_user,
+                is_verified=old.is_verified,
             )
             new.password = old.password
             new.save()
