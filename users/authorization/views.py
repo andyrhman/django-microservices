@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 
 from authorization.authentication import JWTAuthentication
 from authorization.serializers import UserSerializer
-from core.models import Token, User
+from core.models import Token, User, UserSession
 from decouple import config
 from google.oauth2 import id_token
 from google.auth.transport.urllib3 import Request as GoogleRequest
@@ -69,8 +69,14 @@ class LoginAPIView(APIView):
         if user.is_user and data['scope'] == "admin":
             raise exceptions.AuthenticationFailed("Unauthorized")
 
-        token = JWTAuthentication.generate_jwt(user.id, data['scope'])
+        token, exp = JWTAuthentication.generate_jwt(user.id, data['scope'])
 
+        UserSession.objects.create(
+            user=user.id,
+            token=token,
+            expired_at=exp
+        )
+        
         return Response({
             'jwt': token
         })
@@ -92,11 +98,13 @@ class LogoutAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def post(self, _):
-        response = Response()
-        response.delete_cookie(key="user_session")
-        response.data = {"message": "Success"}
-        return response
+    def post(self, request):
+        token = request.COOKIES.get('user_session')
+        UserSession.objects.filter(
+            user=request.user.id,
+            token=token
+        ).delete()
+        return Response({"message": "Success"})
 
 
 class UpdateInfoAPIView(APIView):

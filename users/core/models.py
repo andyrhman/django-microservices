@@ -52,6 +52,12 @@ class User(AbstractUser):
 
     objects = UserManager()
     
+class UserSession(models.Model):
+    user = models.UUIDField(default=uuid.uuid4, editable=False)
+    token = models.CharField(max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expired_at = models.DateTimeField()
+    
 class Token(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     email = models.EmailField()

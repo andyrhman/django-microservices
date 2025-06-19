@@ -3,7 +3,7 @@ from decouple import config
 from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
 
-from core.models import User
+from core.models import User, UserSession
 
 class JWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
@@ -17,32 +17,37 @@ class JWTAuthentication(BaseAuthentication):
             raise exceptions.AuthenticationFailed('Unauthenticated')
 
         path = request.path.lower()
-        # 1) admin-only
         if path.startswith('/api/admin/'):
             if payload['scope'] != 'admin':
                 raise exceptions.AuthenticationFailed('Invalid Scope!')
-        # 2) user-only
         elif path.startswith('/api/user/'):
             if payload['scope'] != 'user':
                 raise exceptions.AuthenticationFailed('Invalid Scope!')
-        # 3) “generic” api: allow either
         elif path.startswith('/api/'):
             if payload['scope'] not in ('user', 'admin'):
                 raise exceptions.AuthenticationFailed('Invalid Scope!')
         else:
-            # not an API route we care about
             return None
 
         user = User.objects.get(id=payload['user_id'])
+        
+        if user is None:
+            raise exceptions.AuthenticationFailed('User not found')
+        
+        if not UserSession.objects.filter(user=user.id, token=token, expired_at__gt=datetime.datetime.now(datetime.timezone.utc)).exists():
+            raise exceptions.AuthenticationFailed('Unauthenticated')
+        
         return (user, None)
     
     @staticmethod
-    def generate_jwt(id, scope):
+    def generate_jwt(user_id, scope):
+        now = datetime.datetime.now(datetime.timezone.utc)
+        exp = now + datetime.timedelta(days=1)
         payload = {
-            'user_id': str(id), 
+            'user_id': str(user_id),
             'scope': scope,
-            'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=1),
-            'iat': datetime.datetime.now(datetime.timezone.utc)
+            'iat': now,
+            'exp': exp,
         }
-        
-        return jwt.encode(payload, config('JWT_SECRET'), algorithm='HS256')
+        token = jwt.encode(payload, config('JWT_SECRET'), algorithm='HS256')
+        return token, exp

@@ -143,7 +143,7 @@ REST_FRAMEWORK = {
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'id-ID'
+LANGUAGE_CODE = 'en-US'
 
 TIME_ZONE = 'UTC'
 
