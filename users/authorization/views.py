@@ -5,9 +5,9 @@ import string
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
+from django.forms import model_to_dict
 from django.template.loader import render_to_string
 from django.views.generic import TemplateView
-import requests
 from rest_framework import exceptions, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -20,7 +20,7 @@ from decouple import config
 from google.oauth2 import id_token
 from google.auth.transport.urllib3 import Request as GoogleRequest
 from django.views.generic import TemplateView
-from authorization.signals import user_registered
+from app.producer import send_message
 
 # Create your views here.
 class RegisterAPIView(APIView):
@@ -184,26 +184,16 @@ class ResendVerifyAPIView(APIView):
             expiresAt=expiresAt ,
             used=False,
         )
-
+        
         origin = config('ORIGIN')
         verify_url = f"{origin}/verify/{token_str}"
 
-        html_content = render_to_string(
-            "email_template.html",
-            {
-                "name": user.fullName,
-                "url": verify_url,
-            },
-        )
-
-        send_mail(
-            subject="Verify your email",
-            message="",
-            from_email="service@mail.com",
-            recipient_list=[user.email],
-            html_message=html_content,
-            fail_silently=False,
-        )
+        payload = {
+            "event": "user_registered",
+            "user": model_to_dict(user),
+            "verify_url": verify_url,
+        }
+        send_message(config('KAFKA_TOPIC', default='default'), payload)
 
         return Response(
             {"message": "Email has been sent successfully"},
@@ -240,77 +230,7 @@ class VerifyAccountAPIView(APIView):
         user.save()
         
         return Response({"message": "Account Verified Successfully"}, status=status.HTTP_202_ACCEPTED)
-
-class GoogleAuthAPIView(APIView):
-    def post(self, request):
-        token = request.data.get("token")
-        remember_me = request.data.get("rememberMe", False)
-
-        if not token:
-            return Response(
-                {"message": "Token is required"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        # 1) Verify the Google ID token
-        try:
-            idinfo = id_token.verify_oauth2_token(
-                token,
-                GoogleRequest(),
-                config("GOOGLE_CLIENT_ID"),
-            )
-        except ValueError:
-            return Response(
-                {"message": "Unauthorized"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-
-        email = idinfo.get("email")
-        if not email:
-            return Response(
-                {"message": "Unauthorized"},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
-
-        # 2) Find or create the user
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            # generate random credentials
-            random_username = f"user{random.randint(1000, 9999)}"
-            random_password = "".join(
-                secrets.choice(string.ascii_letters + string.digits) for _ in range(10)
-            )
-            user = User(
-                fullName=random_username,
-                username=random_username,
-                email=email,
-            )
-            user.set_password(random_password)
-            user.save()
-
-        # 3) Issue JWT
-        scope = "user"  # or detect from path if you need admin vs user
-        jwt_token = JWTAuthentication.generate_jwt(user.id, scope)
-
-        # 4) Set cookie with correct expiration
-        max_age = 365 * 24 * 60 * 60 if remember_me else 7 * 24 * 60 * 60
-        expires = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(seconds=max_age)
-
-        response = Response(
-            {"message": "Successfully logged in"},
-            status=status.HTTP_200_OK,
-        )
-        response.set_cookie(
-            key="user_session",
-            value=jwt_token,
-            httponly=True,
-            expires=expires,
-            secure=not settings.DEBUG,  # optional: only send over HTTPS in prod
-            samesite="Lax",
-        )
-        return response
-
+    
 class RegisterPageView(TemplateView):
     template_name = "auth/register.html"
 

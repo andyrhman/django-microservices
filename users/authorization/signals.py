@@ -34,5 +34,5 @@ def send_verification_email(sender, user, **kwargs):
         "user": model_to_dict(user),
         "verify_url": verify_url,
     }
-    send_message.send(config('KAFKA_TOPIC', default='default'), payload)
+    send_message(config('KAFKA_TOPIC', default='default'), payload)
 

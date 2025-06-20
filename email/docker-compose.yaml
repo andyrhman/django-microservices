@@ -1,7 +1,9 @@
 services:
   shop_email:
     container_name: shop_email
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
     env_file:
       - .env
     volumes:
