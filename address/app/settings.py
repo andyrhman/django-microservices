@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g=sxtxaw%la=8x05h__m#br_hs)bmjyl=eeifbg9i$c0g@p*c1'
+SECRET_KEY = 'django-insecure-9s9xwm3o!0e^jxb4&7wy+4#nt)x-dx2j)=_f-$nrb8s-yc)yqf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,14 +40,11 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     'core',
-    'authorization'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
-    # ? 'django.middleware.common.CommonMiddleware', [FIX] django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'shop_users:8000'. 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -93,31 +90,10 @@ DATABASES = {
             'sslmode': 'require',
         },
     },
-    'old_users': {
-        'engine': 'django.db.backends.postgresql',
-        'name': config('OLD_POSTGRES_DB'),
-        'user': config('POSTGRES_USER'),
-        'password': config('POSTGRES_PASSWORD'),
-        'host': config('POSTGRES_HOST'),
-        'port': config('POSTGRES_PORT'),
-        'options': {
-            'sslmode': 'require',  
-        },
-    },
 }
-
-
-DATABASE_ROUTERS = ['core.db_routers.olduserrouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
-PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.Argon2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -135,17 +111,13 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
     'EXCEPTION_HANDLER': 'core.exception_handler.custom_exception_handler',
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-US'
+LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
@@ -163,8 +135,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
-
-AUTH_USER_MODEL = 'core.User'
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True

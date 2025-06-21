@@ -1,12 +1,7 @@
 import datetime
-import random
 import secrets
-import string
-from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail
 from django.forms import model_to_dict
-from django.template.loader import render_to_string
 from django.views.generic import TemplateView
 from rest_framework import exceptions, status
 from rest_framework.permissions import IsAuthenticated
@@ -17,8 +12,6 @@ from authorization.authentication import JWTAuthentication
 from authorization.serializers import UserSerializer
 from core.models import Token, User, UserSession
 from decouple import config
-from google.oauth2 import id_token
-from google.auth.transport.urllib3 import Request as GoogleRequest
 from django.views.generic import TemplateView
 from app.producer import send_message
 
