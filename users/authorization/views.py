@@ -14,6 +14,7 @@ from core.models import Token, User, UserSession
 from decouple import config
 from django.views.generic import TemplateView
 from app.producer import send_message
+from core.utils import detect_scope_from_path
 
 # Create your views here.
 class RegisterAPIView(APIView):
@@ -30,49 +31,64 @@ class RegisterAPIView(APIView):
         return Response({'message': "Successfully Registered"})
 
 class LoginAPIView(APIView):
+
     def post(self, request):
-        data = request.data
+        data  = request.data
+        scope = detect_scope_from_path(request.path)
 
+        # 1) Lookup by email or username
         if "email" in data:
-            try:
-                user = User.objects.get(email=data["email"].lower())
-            except ObjectDoesNotExist:
-                return Response(
-                    {"message": "Invalid email!"}, status=status.HTTP_400_BAD_REQUEST
-                )
+            lookup = {"email": data["email"].lower()}
         elif "username" in data:
-            try:
-                user = User.objects.get(username=data["username"].lower())
-            except ObjectDoesNotExist:
-                return Response(
-                    {"message": "Invalid username!"}, status=status.HTTP_400_BAD_REQUEST
-                )
-
-        if not user.check_password(data["password"]):
+            lookup = {"username": data["username"].lower()}
+        else:
             return Response(
-                {"message": "Invalid password"}, status=status.HTTP_400_BAD_REQUEST
+                {"message": "Must supply email or username"},
+                status=status.HTTP_400_BAD_REQUEST
             )
-            
-        if user.is_verified is False:
+
+        try:
+            user = User.objects.get(**lookup)
+        except ObjectDoesNotExist:
+            return Response(
+                {"message": "Invalid credentials"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # 2) Password check
+        if not user.check_password(data.get("password", "")):
+            return Response(
+                {"message": "Invalid credentials"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # 3) Verified?
+        if not user.is_verified:
             return Response(
                 {"message": "Please verify your account first"},
                 status=status.HTTP_403_FORBIDDEN,
             )
 
-        if user.is_user and data['scope'] == "admin":
+        # 4) User trying to login via admin endpoint?
+        if user.is_user and scope == "admin":
             raise exceptions.AuthenticationFailed("Unauthorized")
 
-        token, exp = JWTAuthentication.generate_jwt(user.id, data['scope'])
-
+        # 5) Generate & save JWT
+        token, exp = JWTAuthentication.generate_jwt(user.id, scope)
         UserSession.objects.create(
-            user=user.id,
-            token=token,
-            expired_at=exp
+            user       = user.id,
+            token      = token,
+            expired_at = exp
         )
-        
-        return Response({
-            'jwt': token
-        })
+
+        # 6) Return to client
+        resp = Response({"jwt": token}, status=status.HTTP_200_OK)
+        resp.set_cookie(
+            key      = "user_session",
+            value    = token,
+            httponly = True,
+        )
+        return resp
 
 
 class UserAPIView(APIView):
@@ -86,7 +102,20 @@ class UserAPIView(APIView):
 
         return Response(serializer.data)
 
+class UserDetailByIdAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes     = []   # scope already checked in JWTAuthentication
 
+    def get(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            return Response(
+                {"message": "User not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        return Response(UserSerializer(user).data)
+    
 class LogoutAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]

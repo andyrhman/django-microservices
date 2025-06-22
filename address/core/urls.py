@@ -1,0 +1,7 @@
+from django.urls import path
+
+from core.views import AddressAPIView
+
+urlpatterns = [
+    path("address", AddressAPIView.as_view(), name="address-crud"),
+]

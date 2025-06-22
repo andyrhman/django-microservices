@@ -10,4 +10,4 @@ class Address(models.Model):
     zip = models.CharField(max_length=20)
     country = models.CharField(max_length=255)
     phone = models.CharField(max_length=50)
-    user = models.UUIDField(default=uuid.uuid4, editable=False)
+    user = models.UUIDField(default=uuid.uuid4, editable=False, db_column='user_id')

@@ -94,20 +94,20 @@ DATABASES = {
         },
     },
     'old_users': {
-        'engine': 'django.db.backends.postgresql',
-        'name': config('OLD_POSTGRES_DB'),
-        'user': config('POSTGRES_USER'),
-        'password': config('POSTGRES_PASSWORD'),
-        'host': config('POSTGRES_HOST'),
-        'port': config('POSTGRES_PORT'),
-        'options': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('OLD_POSTGRES_DB'),
+        'USER': config('POSTGRES_USER'),
+        'PASSWORD': config('POSTGRES_PASSWORD'),
+        'HOST': config('POSTGRES_HOST'),
+        'PORT': config('POSTGRES_PORT'),
+        'OPTIONS': {
             'sslmode': 'require',  
         },
     },
 }
 
 
-DATABASE_ROUTERS = ['core.db_routers.olduserrouter']
+DATABASE_ROUTERS = ['core.db_routers.OldUserRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

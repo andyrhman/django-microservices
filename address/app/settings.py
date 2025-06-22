@@ -90,7 +90,20 @@ DATABASES = {
             'sslmode': 'require',
         },
     },
+    'old_data': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('OLD_POSTGRES_DB'),
+        'USER': config('POSTGRES_USER'),
+        'PASSWORD': config('POSTGRES_PASSWORD'),
+        'HOST': config('POSTGRES_HOST'),
+        'PORT': config('POSTGRES_PORT'),
+        'OPTIONS': {
+            'sslmode': 'require',  
+        },
+    },
 }
+
+DATABASE_ROUTERS = ['core.db_routers.OldDBRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -111,6 +124,12 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
+     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'core.authentication.JWTAuthentication',  # copy your class
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],   
     'EXCEPTION_HANDLER': 'core.exception_handler.custom_exception_handler',
 }
 
