@@ -15,6 +15,7 @@ from decouple import config
 from django.views.generic import TemplateView
 from app.producer import send_message
 from core.utils import detect_scope_from_path
+from authorization.permissions import IsAdminScope
 
 # Create your views here.
 class RegisterAPIView(APIView):
@@ -104,34 +105,32 @@ class UserAPIView(APIView):
 
 class UsersAPIView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes     = []
+    permission_classes     = [IsAdminScope]
 
     def get(self, _, user_id):
         if user_id is None:
-            return Response(UserSerializer(User.objects.all()).data, status=status.HTTP_200_OK)
-        
-        return Response(UserSerializer(User.objects.get(id=user_id)).data)
-    
+            qs = User.objects.all()
+            data = UserSerializer(qs, many=True).data
+            return Response(data, status=status.HTTP_200_OK)
+
+        user = User.objects.get(id=user_id)
+        return Response(UserSerializer(user).data)
+
+
 class BulkUsersAPIView(APIView):
-    """
-    POST /api/admin/users/bulk/     (or /api/user/users/bulk/)
-    { "ids": ["uuid1","uuid2", …] }
-    → { "uuid1": {..user1..}, "uuid2": {..user2..}, … }
-    """
     authentication_classes = [JWTAuthentication]
-    permission_classes     = []  # JWTAuthentication already enforces scope
+    permission_classes     = [IsAdminScope]
 
     def post(self, request):
         ids = request.data.get("ids", [])
         if not isinstance(ids, list):
-            return Response({"message": "ids must be a list"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "ids must be a list"},
+                            status=status.HTTP_400_BAD_REQUEST)
 
-        users = User.objects.filter(id__in=ids)
+        users     = User.objects.filter(id__in=ids)
         serialized = UserSerializer(users, many=True).data
-
-        # turn list into {id → data}
-        result = { u["id"]: u for u in serialized }
-        return Response(result, status=status.HTTP_200_OK)   
+        result    = {u["id"]: u for u in serialized}
+        return Response(result, status=status.HTTP_200_OK)
     
 class LogoutAPIView(APIView):
     authentication_classes = [JWTAuthentication]

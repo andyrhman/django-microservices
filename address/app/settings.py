@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.UserMicroserviceAuthMiddleware',   
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -104,16 +105,6 @@ DATABASES = {
 }
 
 DATABASE_ROUTERS = ['core.db_routers.OldDBRouter']
-
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": config('REDIS_CREDENTIALS'),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        },
-    },
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

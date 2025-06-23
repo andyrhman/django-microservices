@@ -1,7 +1,7 @@
 from django.urls import path
 
-from core.views import AddressAPIView
+from core.views import AddressDetailAPIView
 
 urlpatterns = [
-    path("address", AddressAPIView.as_view(), name="address-crud"),
+    path("address", AddressDetailAPIView.as_view(), name="address-crud"),
 ]

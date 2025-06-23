@@ -35,5 +35,20 @@ class AddressSerializer(serializers.ModelSerializer):
         list_serializer_class = BulkUserListSerializer
 
     def get_user(self, address):
-        users_map = self.context.get("users_map", {})
-        return users_map.get(str(address.user))
+        request   = self.context['request']
+        token     = request.COOKIES.get('user_session')
+        scope     = "admin" if request.path.startswith("/api/admin/") else "user"
+        user_id   = str(address.user)
+
+        users_map = self.context.get("users_map")
+        if users_map is not None:
+            return users_map.get(user_id)
+
+        resp = UserService.get(
+            f"{scope}",
+            cookies={"user_session": token},
+            timeout=5
+        )
+        if not resp.ok:
+            return None
+        return resp.json()
