@@ -102,19 +102,36 @@ class UserAPIView(APIView):
 
         return Response(serializer.data)
 
-class UserDetailByIdAPIView(APIView):
+class UsersAPIView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes     = []   # scope already checked in JWTAuthentication
+    permission_classes     = []
 
-    def get(self, request, user_id):
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            return Response(
-                {"message": "User not found"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        return Response(UserSerializer(user).data)
+    def get(self, _, user_id):
+        if user_id is None:
+            return Response(UserSerializer(User.objects.all()).data, status=status.HTTP_200_OK)
+        
+        return Response(UserSerializer(User.objects.get(id=user_id)).data)
+    
+class BulkUsersAPIView(APIView):
+    """
+    POST /api/admin/users/bulk/     (or /api/user/users/bulk/)
+    { "ids": ["uuid1","uuid2", …] }
+    → { "uuid1": {..user1..}, "uuid2": {..user2..}, … }
+    """
+    authentication_classes = [JWTAuthentication]
+    permission_classes     = []  # JWTAuthentication already enforces scope
+
+    def post(self, request):
+        ids = request.data.get("ids", [])
+        if not isinstance(ids, list):
+            return Response({"message": "ids must be a list"}, status=status.HTTP_400_BAD_REQUEST)
+
+        users = User.objects.filter(id__in=ids)
+        serialized = UserSerializer(users, many=True).data
+
+        # turn list into {id → data}
+        result = { u["id"]: u for u in serialized }
+        return Response(result, status=status.HTTP_200_OK)   
     
 class LogoutAPIView(APIView):
     authentication_classes = [JWTAuthentication]
