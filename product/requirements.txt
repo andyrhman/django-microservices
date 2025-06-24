@@ -4,6 +4,7 @@ charset-normalizer==3.4.2
 Django==5.1.7
 django-cors-headers==4.7.0
 django-filter==25.1
+django-redis==5.4.0
 djangorestframework==3.16.0
 idna==3.10
 kafka-python==2.2.11
@@ -11,6 +12,7 @@ packaging==24.2
 psycopg2-binary==2.9.10
 PyJWT==2.10.1
 python-decouple==3.8
+redis==6.2.0
 requests==2.32.3
 sqlparse==0.5.3
 urllib3==2.5.0

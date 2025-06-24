@@ -1,9 +1,9 @@
 # services.py
-import os
 import requests
+from decouple import config
 
 class UserService:
-    base_url = 'http://shop_users:8000'
+    base_url = config('USERS_SERVICE_URL')
 
     @staticmethod
     def get(path, *, headers=None, cookies=None, timeout=None):

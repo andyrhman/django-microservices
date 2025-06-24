@@ -18,7 +18,10 @@ services:
     networks:
       - product
       - users
+      - category
 networks:
   product:
   users:
+    external: true
+  category:
     external: true

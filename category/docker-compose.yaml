@@ -20,5 +20,6 @@ services:
       - users
 networks:
   category:
+    name: category
   users:
     external: true
