@@ -21,6 +21,7 @@ services:
       - category
 networks:
   product:
+    name: product
   users:
     external: true
   category:

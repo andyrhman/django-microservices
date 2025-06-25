@@ -7,25 +7,16 @@ from core.models import Product, ProductImages, ProductVariation
 from core.services import CategoryService
 
 class ProductAdminSerializer(serializers.ModelSerializer):
-    # pull remote category data at read time
     category = serializers.SerializerMethodField()
     average_rating = serializers.FloatField(read_only=True)
 
     class Meta:
         model  = Product
-        fields = ['id', 'title', 'slug', 'description',
-                  'image', 'price', 'category', 'average_rating']
+        fields = ['id','title','slug','description','image','price','category','average_rating']
 
     def get_category(self, obj):
-        request = self.context['request']
-        token   = request.COOKIES.get('user_session')
-        cookies = {'user_session': token} if token else None
-
-        try:
-            cat = CategoryService.get_category_admin(obj.category, cookies=cookies)
-            return {'id': cat['id'], 'name': cat['name']}
-        except requests.HTTPError:
-            return None
+        cats_map = self.context.get('categories_map', {})
+        return cats_map.get(str(obj.category))
         
 class ProductCreateSerializer(serializers.ModelSerializer):
     # still accept UUID on write
