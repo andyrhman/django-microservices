@@ -1,0 +1,23 @@
+services:
+  shop_cart:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: shop_cart
+    volumes:
+      - .:/app
+    ports:
+      - "8005:8000"
+    env_file:
+      - .env
+    networks:
+      - cart
+      - users
+      - product
+networks:
+  cart:
+    name: cart
+  users:
+    external: true
+  product:
+    external: true

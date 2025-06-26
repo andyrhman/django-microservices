@@ -5,6 +5,7 @@ from django.db.models.functions import Coalesce
 from django.http import JsonResponse
 from django.utils.html import strip_tags
 from rest_framework import generics, mixins, status
+from rest_framework import permissions
 from rest_framework.fields import FloatField
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -278,6 +279,16 @@ class ProductAPIView(generics.RetrieveAPIView):
     
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
+    
+class ProductIdAPIView(generics.RetrieveAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.AllowAny]   
+    pagination_class   = None
+    queryset = Product.objects.all()
+    lookup_field = 'id'
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)   
 
 class ProductPriceFilterAPIView(generics.ListAPIView):
     serializer_class = ProductSerializer
