@@ -4,15 +4,15 @@ from django.db.models import Q, Avg, Count, Value
 from django.db.models.functions import Coalesce
 from django.http import JsonResponse
 from django.utils.html import strip_tags
-from requests import Response
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, status
 from rest_framework.fields import FloatField
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.authentication import JWTAuthentication
-from core.models import Product
-from core.serializers import ProductAdminSerializer, ProductCreateSerializer
+from core.models import Product, ProductImages, ProductVariation
+from core.serializers import ProductAdminSerializer, ProductCreateSerializer, ProductImagesCreateSerializer, ProductSerializer, ProductVariationCreateSerializer, ProductVariationSerializer, ProductImagesSerializer
 from core.services import CategoryService
 from core.utils import TenPerPagePagination
 
@@ -98,11 +98,56 @@ class ProductRUDAPIView(
         instance.delete()
         cache.delete_pattern("products:*")
         
-class ProductVariantCDAPIView():
-    pass
+class ProductVariantCDAPIView(
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView
+):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = ProductVariation.objects.all()
+    lookup_field = 'id'
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return ProductVariationCreateSerializer
+        return ProductSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        
+        serializer.is_valid(raise_exception=True)
 
-class ProductImagesCDAPIView():
-    pass
+        saved_variants = serializer.save()
+        
+        response_variants = ProductVariationSerializer(saved_variants, many=True)
+        
+        return Response(response_variants.data)
+        
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+    
+class ProductImagesCDAPIView(
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView
+):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProductImagesCreateSerializer
+    queryset = ProductImages.objects.all()
+    lookup_field = 'id'
+    
+    def get_serializer_class(self):
+        return super().get_serializer_class()
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        saved_images = serializer.save()
+        
+        images_serializer = ProductImagesSerializer(saved_images, many=True)
+        return Response(images_serializer.data)
 
 class ProductsAPIView(generics.GenericAPIView):
     authentication_classes = []
@@ -204,6 +249,93 @@ class ProductsAPIView(generics.GenericAPIView):
         }
         cache.set(cache_key, payload, 30 * 60)
         return JsonResponse(payload)
+
+class ProductAvgRatingAPIView(generics.RetrieveAPIView):
+    pass
+    # queryset = Product.objects.all()
+    # lookup_field = 'id'
+    # serializer_class = ProductSerializer
+    
+    # def get(self, request, *args, **kwargs):
+    #     response = super().retrieve(request, *args, **kwargs)
+        
+    #     # ? We will fetch only the averageRating to show in the response
+    #     average_rating = response.data.get('averageRating')
+        
+    #     return Response({"averageRating": average_rating})
+    
+class ProductVariantsAPIView(generics.ListAPIView):
+    serializer_class = ProductVariationSerializer
+    queryset = ProductVariation.objects.all()
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+class ProductAPIView(generics.RetrieveAPIView):
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
+    lookup_field = 'slug'
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+class ProductPriceFilterAPIView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    
+    def initial(self, request, *args, **kwargs):
+        super().initial(request, *args, **kwargs)
+        qs      = self.filter_queryset(self.get_queryset())
+        ids     = {str(p.category) for p in qs}
+        token   = request.COOKIES.get('user_session')
+        cookies = {'user_session': token} if token else None
+        try:
+            cats = CategoryService.list_categories(ids, cookies=cookies)
+            self.categories_map = {c['id']: c for c in cats}
+        except:
+            self.categories_map = {}
+
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+    
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['categories_map'] = getattr(self, 'categories_map', {})
+        return ctx
+    
+    def get_queryset(self):
+        price_param = self.request.data.get("price")
+        try:
+            price_value = float(price_param)
+        except (TypeError, ValueError):
+            return Product.objects.none()
+
+        return Product.objects.filter(price__gte=price_value).order_by("price")
+
+    def post(self, request, *args, **kwargs):
+        if "price" not in request.data:
+            return Response(
+                {"detail": "Field 'price' is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            price_value = float(request.data["price"])
+        except (TypeError, ValueError):
+            return Response(
+                {"detail": "Invalid price; must be a number."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        cache_key = f"price_filter:{price_value}"
+        
+        if (cached := cache.get(cache_key)) is not None:
+            return JsonResponse(cached, safe=False)
+
+        serializer = self.get_serializer(self.filter_queryset(self.get_queryset()), many=True)
+        data       = serializer.data
+
+        cache.set(cache_key, data, timeout=30 * 60)
+
+        return JsonResponse(data, safe=False)
     
 class ProductCategoryCountAPIView(APIView):
     authentication_classes = []

@@ -1,4 +1,3 @@
-from django.http import JsonResponse
 from rest_framework import generics, mixins, status
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
@@ -7,7 +6,7 @@ from rest_framework.views import APIView
 
 from core.services import ProductService
 from core.authentication import JWTAuthentication
-from core.serializers import CategorySerializer, ProductCategorySerializer
+from core.serializers import CategorySerializer
 from core.models import Category
 
 # Create your views here.
@@ -61,11 +60,6 @@ class CategoryGenericAPIView(
         
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-
-class CategoriesWithProductsAPIView(generics.RetrieveAPIView):
-    queryset         = Category.objects.all()
-    lookup_field     = 'id'
-    serializer_class = ProductCategorySerializer
 
 class PublicCategoryListAPIView(generics.ListAPIView):
     queryset           = Category.objects.all()

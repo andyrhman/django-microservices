@@ -6,6 +6,51 @@ import re
 from core.models import Product, ProductImages, ProductVariation
 from core.services import CategoryService
 
+class ProductVariationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductVariation
+        fields = "__all__"
+        
+class ProductImagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImages
+        fields = "__all__"
+        
+class ProductSerializer(serializers.ModelSerializer):
+    category = serializers.SerializerMethodField()
+    products_images = ProductImagesSerializer(many=True, read_only=True)
+    products_variation = ProductVariationSerializer(many=True, read_only=True)
+    # review_products     = ReviewSerializer(many=True, read_only=True)
+    # averageRating       = serializers.SerializerMethodField()
+    # reviewCount         = serializers.SerializerMethodField()
+    class Meta:
+        model  = Product
+        fields = [
+            'id','title','slug','description','image','price',
+            'category','products_images','products_variation',
+            'created_at', 'updated_at'
+        ]
+    # class Meta:
+    #     model  = Product
+    #     fields = [
+    #         'id','title','slug','description','image','price',
+    #         'category','products_images','products_variation',
+    #         'created_at', 'updated_at',
+    #         'review_products','averageRating','reviewCount',
+    #     ]
+
+    def get_category(self, obj):
+        cats_map = self.context.get('categories_map', {})
+        return cats_map.get(str(obj.category))
+    # def get_averageRating(self, obj):
+    #     qs = obj.review_products.all()
+    #     if not qs.exists():
+    #         return 0
+    #     return round(sum(r.star for r in qs) / qs.count(), 2)
+
+    # def get_reviewCount(self, obj):
+    #     return obj.review_products.count()
+        
 class ProductAdminSerializer(serializers.ModelSerializer):
     category = serializers.SerializerMethodField()
     average_rating = serializers.FloatField(read_only=True)
@@ -92,3 +137,66 @@ class ProductCreateSerializer(serializers.ModelSerializer):
             setattr(instance, attr, val)
         instance.save()
         return instance
+
+class ProductVariationCreateSerializer(serializers.ModelSerializer):
+    name = serializers.ListField(
+        child=serializers.CharField()
+    )
+    
+    product = serializers.UUIDField()
+
+    class Meta:
+        model = ProductVariation
+        fields = "__all__"
+        
+    def validate_product(self, value):
+        if not Product.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Product does not exists")
+        return value
+        
+    def create(self, validated_data):
+        name = validated_data.pop('name', [])
+        product_id = validated_data.pop('product', [])
+        product = Product.objects.get(id=product_id)
+        
+        variants = []
+        for n in name:
+            variant = ProductVariation.objects.create(
+                name=n,
+                product=product
+            )
+            
+            variants.append(variant)
+            
+        return variants
+            
+class ProductImagesCreateSerializer(serializers.ModelSerializer):
+    name = serializers.ListField(
+        child=serializers.CharField()
+    )
+    
+    product = serializers.UUIDField()
+    class Meta:
+        model = ProductImages
+        fields = "__all__"
+    
+    def validate_product(self, value):
+        if not Product.objects.filter(id=value).exists():
+            raise serializers.ValidationError("Product does not exists")
+        return value
+     
+    def create(self, validated_data):
+        name = validated_data.pop('name', [])
+        
+        product_id = validated_data.pop('product', [])
+        product = Product.objects.get(id=product_id)
+        
+        images = []
+        for n in name:
+            image = ProductImages.objects.create(
+                name=n,
+                product=product
+            )
+            images.append(image)
+
+        return images
