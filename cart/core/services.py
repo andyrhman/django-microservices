@@ -9,6 +9,18 @@ class UserService:
     def get(path, *, headers=None, cookies=None, timeout=None):
         url = f"{UserService.base_url}/api/{path.lstrip('/')}"
         return requests.get(url, headers=headers, cookies=cookies, timeout=timeout)
+    
+    @staticmethod
+    def post(path, *, json=None, data=None, headers=None, cookies=None, timeout=None):
+        url = f"{UserService.base_url}/api/{path.lstrip('/')}"
+        return requests.post(
+            url,
+            json=json,
+            data=data,
+            headers=headers,
+            cookies=cookies,
+            timeout=timeout
+        )
 
 class ProductService:
     base_url = config('PRODUCT_SERVICE_URL').rstrip('/')

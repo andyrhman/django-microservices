@@ -1,3 +1,4 @@
+from codecs import lookup
 import datetime
 import secrets
 from django.core.exceptions import ObjectDoesNotExist
@@ -106,16 +107,26 @@ class UserAPIView(APIView):
 class UsersAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes     = [IsAdminScope]
+    lookup_field = "user_id"
 
-    def get(self, _, user_id):
+    def get(self, request, user_id=None):
         if user_id is None:
             qs = User.objects.all()
+            s = request.query_params.get("search", "")
+            if s:
+                qs = list(
+                    [
+                        u
+                        for u in qs
+                        if (s.lower() in u.fullName.lower())
+                        or (s.lower() in u.username.lower())
+                    ]
+                )           
             data = UserSerializer(qs, many=True).data
             return Response(data, status=status.HTTP_200_OK)
 
         user = User.objects.get(id=user_id)
         return Response(UserSerializer(user).data)
-
 
 class BulkUsersAPIView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -131,6 +142,17 @@ class BulkUsersAPIView(APIView):
         serialized = UserSerializer(users, many=True).data
         result    = {u["id"]: u for u in serialized}
         return Response(result, status=status.HTTP_200_OK)
+    
+class TotalUsersAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminScope]
+    
+    def get(self, request):
+        users = User.objects.all()
+        
+        total = len(users)
+        
+        return Response({"total": total})
     
 class LogoutAPIView(APIView):
     authentication_classes = [JWTAuthentication]

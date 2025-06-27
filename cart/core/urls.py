@@ -1,9 +1,9 @@
 from django.urls import path
 
-from core.views import CartCRUDAPIView
+from core.views import CartCRUDAPIView, TotalCartAPIView
 
 urlpatterns = [
     path('cart', CartCRUDAPIView.as_view(), name='api-cart'),
     path('cart/<str:id>', CartCRUDAPIView.as_view(), name='api-cart-detail'),
-    # path('cart-total', TotalCartAPIView.as_view(), name='api-cart-total'),
+    path('cart-total', TotalCartAPIView.as_view(), name='api-cart-total'),
 ]

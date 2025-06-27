@@ -5,5 +5,4 @@ from authorization.views import ResendVerifyAPIView, UsersAPIView, VerifyAccount
 urlpatterns = [
     path("verify", ResendVerifyAPIView.as_view(), name='api-resend-verify'),
     path("verify/<str:token>", VerifyAccountAPIView.as_view(), name='api-verify-account'),
-    path("users", UsersAPIView.as_view()),
 ]
