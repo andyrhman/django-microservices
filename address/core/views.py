@@ -1,6 +1,6 @@
 from rest_framework import exceptions, mixins, status
 from rest_framework import generics
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -9,13 +9,17 @@ from core.serializers import AddressSerializer
 from core.authentication import JWTAuthentication
 
 # Create your views here.
-class AddressAPIView(ListAPIView):
+class AddressAPIView(ListAPIView, RetrieveAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes     = [IsAuthenticated]
     serializer_class       = AddressSerializer
+    lookup_field           = 'id'
+    queryset              = Address.objects.all()
 
-    def get_queryset(self):
-        return Address.objects.all()
+    def get(self, request, *args, **kwargs):
+        if kwargs.get('id'):
+            return self.retrieve(request, *args, **kwargs)
+        return self.list(request, *args, **kwargs)
     
 class AddressDetailAPIView(
     mixins.CreateModelMixin,

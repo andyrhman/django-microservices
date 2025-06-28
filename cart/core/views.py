@@ -4,8 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from core.services import ProductService
 from core.models import Cart
-from core.serializers import CartAdminSerializer, CartCreateSerializer, CartQuantityUpdateSerializer, CartSerializer
+from core.serializers import CartAdminSerializer, CartCreateSerializer, CartQuantityUpdateSerializer, CartSerializer, CartUpdateSerializer
 from core.authentication import JWTAuthentication
 
 # Create your views here.
@@ -141,3 +142,67 @@ class CartCRUDAPIView(
         response.status = status.HTTP_204_NO_CONTENT
         
         return response
+    
+class CartBulkAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes     = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user_ms
+        carts_qs = list(Cart.objects.filter(user=user, completed=False))
+
+        prod_ids = {str(c.product) for c in carts_qs}
+
+        product_map = {}
+        for pid in prod_ids:
+            prod = ProductService.get_product_by_id(pid)  
+            product_map[pid] = prod
+
+        serializer = CartSerializer(
+            carts_qs,
+            many=True,
+            context={
+                'request':      request,
+                'product_map':  product_map
+            }
+        )
+        return Response({'data': serializer.data})
+
+class CartBulkAPICompletedView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes     = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user_ms
+        carts_qs = list(Cart.objects.filter(user=user, completed=True))
+
+        prod_ids = {str(c.product) for c in carts_qs}
+
+        product_map = {}
+        for pid in prod_ids:
+            prod = ProductService.get_product_by_id(pid)  
+            product_map[pid] = prod
+
+        serializer = CartSerializer(
+            carts_qs,
+            many=True,
+            context={
+                'request':      request,
+                'product_map':  product_map
+            }
+        )
+        return Response({'data': serializer.data})
+    
+class UserCartCompleteAPIView(generics.UpdateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes     = [IsAuthenticated]
+    queryset               = Cart.objects.all()
+    lookup_field           = 'id'
+    serializer_class       = CartUpdateSerializer
+
+    def get_queryset(self):
+        uid = self.request.user_ms
+        return Cart.objects.filter(user=uid)
+
+    def put(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)

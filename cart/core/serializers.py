@@ -1,8 +1,6 @@
 import requests
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from rest_framework.response import Response
-from rest_framework.status import HTTP_404_NOT_FOUND
 
 from core.services import UserService
 from core.services import ProductService
@@ -33,34 +31,44 @@ class BulkUserListSerializer(serializers.ListSerializer):
         return super().to_representation(data)
         
 class CartSerializer(serializers.ModelSerializer):
-    variant = serializers.SerializerMethodField()
-    product = serializers.SerializerMethodField()
+    product            = serializers.SerializerMethodField()
+    variant = serializers.SerializerMethodField(method_name='get_variant')
 
     class Meta:
-        model = Cart
+        model  = Cart
         fields = "__all__"
-        
+
     def get_product(self, obj):
-        try:
-            prod = ProductService.get_product_by_id(obj.product)
-            return {
-                'id':    prod['id'],
-                'title': prod['title'],
-                'slug':  prod['slug'],
-                'image': prod['image'],
-                'price': prod['price'],
-            }
-        except:
-            return None
+        pm = self.context.get('product_map', {})
+        prod = pm.get(str(obj.product))
+        if not prod:
+            try:
+                prod = ProductService.get_product_by_id(obj.product)
+            except Exception:
+                return None
+        return {
+            'id':          prod['id'],
+            'title':       prod['title'],
+            'description': prod.get('description'),
+            'slug':        prod.get('slug'),
+            'image':       prod.get('image'),
+            'price':       prod.get('price'),
+        }
 
     def get_variant(self, obj):
-        try:
-            prod = ProductService.get_product_by_id(obj.product)
-            var  = next((v for v in prod.get('products_variation', [])
-                         if v['id'] == str(obj.variant)), None)
-            return var
-        except:
-            return None
+        # same pattern for variants
+        pm = self.context.get('product_map', {})
+        prod = pm.get(str(obj.product))
+        if not prod:
+            try:
+                prod = ProductService.get_product_by_id(obj.product)
+            except Exception:
+                return None
+        var_id = str(obj.variant)
+        return next(
+            (v for v in prod.get('products_variation', []) if v['id'] == var_id),
+            None
+        )
         
 class CartAdminSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
@@ -124,7 +132,8 @@ class CartCreateSerializer(serializers.ModelSerializer):
             "price":         prod['price'],
             "product_title": prod['title'],
         }
-
+        # ! [BUG] cart is still incrementing quantity even if completed is true
+        # ! it should not increment the quantity if the cart is already completed
         cart_item, created = Cart.objects.get_or_create(
             product = prod['id'],
             variant = var['id'],
@@ -147,5 +156,8 @@ class CartQuantityUpdateSerializer(serializers.ModelSerializer):
         instance.save()
         
         return instance
-        
-        
+
+class CartUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = Cart
+        fields = ['completed', 'order']

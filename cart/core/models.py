@@ -11,6 +11,6 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     product = models.UUIDField(default=uuid.uuid4, editable=False, db_column='product_id')
     user = models.UUIDField(default=uuid.uuid4, editable=False, db_column='user_id')
-    order = models.UUIDField(default=uuid.uuid4, editable=False, db_column='order_id')
+    order = models.UUIDField(null=True, db_column='order_id')
     variant = models.UUIDField(default=uuid.uuid4, editable=False, db_column='variant_id')
 

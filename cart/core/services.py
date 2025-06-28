@@ -23,7 +23,7 @@ class UserService:
         )
 
 class ProductService:
-    base_url = config('PRODUCT_SERVICE_URL').rstrip('/')
+    base_url = config('PRODUCT_SERVICE_URL')
 
     @classmethod
     def get(cls, path, *, timeout=2):
@@ -33,7 +33,7 @@ class ProductService:
         return resp.json()
 
     @classmethod
-    def get_product_by_id(cls, product_id, *, timeout=2):
+    def get_product_by_id(cls, product_id, *, timeout=10):
         """
         GET /api/product-id/{uuid}/
         """
