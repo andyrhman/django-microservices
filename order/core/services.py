@@ -32,11 +32,11 @@ class CartService:
         return requests.put(url, headers=headers, cookies=cookies, json=json, timeout=timeout)
 
 class ProductService:
-    base_url = config('PRODUCT_SERVICE_URL').rstrip('/')
+    base_url = config('PRODUCT_SERVICE_URL')
 
     @staticmethod
-    def get_product_by_id(pid, *, timeout=3):
-        url  = f"{ProductService.base_url}/api/product-id/{pid}/"
+    def get_product_by_id(pid, *, timeout=10):
+        url  = f"{ProductService.base_url}/api/product-id/{pid}"
         resp = requests.get(url, timeout=timeout)
         resp.raise_for_status()
         return resp.json()

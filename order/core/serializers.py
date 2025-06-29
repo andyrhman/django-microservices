@@ -39,6 +39,24 @@ class OrderSerializer(serializers.ModelSerializer):
         model  = Order
         fields = "__all__"
 
+class ChangeOrderStatusSerializer(serializers.ModelSerializer):
+    status = serializers.ChoiceField(
+        choices=OrderItemStatus.choices,
+        error_messages={
+            "invalid_choice": "Status tidak valid. Pilihan yang tersedia adalah: Sedang Dikemas, Dikirim, atau Selesai."
+        }
+    )
+    
+    class Meta:
+        model = OrderItem
+        fields = ['status']
+    
+    def update(self, instance, validated_data):
+        instance.status = validated_data.get("status", instance.status)
+        instance.save()
+        
+        return instance
+    
 class ConfirmOrderSerializer(serializers.ModelSerializer):
     source = serializers.CharField(write_only=True)
     class Meta:

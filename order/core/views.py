@@ -11,9 +11,34 @@ from rest_framework.views import APIView
 from core.authentication import JWTAuthentication
 from core.models import Order, OrderItem, OrderItemStatus
 from core.services import AddressService, CartService, UserService
-from core.serializers import ConfirmOrderSerializer, OrderSerializer
+from core.serializers import ChangeOrderStatusSerializer, ConfirmOrderSerializer, OrderItemSerializer, OrderSerializer
 
 # Create your views here.
+class OrderListAPIView(generics.ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    
+    def get_queryset(self):
+        
+        queryset = super().get_queryset().prefetch_related('order_items_order')
+        
+        search = self.request.query_params.get("search", "").strip()
+        if search:
+            queryset = queryset.filter(
+                Q(order_items_order__product_title__icontains=search) | 
+                Q(name__icontains=search) |
+                Q(email__icontains=search)
+            )
+            
+        return queryset
+    
+    def get(self, _):
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+    
 class CreateOrderAPIView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes     = [IsAuthenticated]
@@ -121,3 +146,31 @@ class ConfirmOrderGenericAPIView(generics.GenericAPIView):
 
         out   = OrderSerializer(order)
         return Response(out.data, status=status.HTTP_201_CREATED)
+    
+class GetUserOrder(generics.ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user_ms)
+    
+class GetOrderItem(generics.RetrieveAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemSerializer
+    lookup_field = 'id'
+   
+class ChangeOrderStatus(generics.UpdateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = OrderItem.objects.all()
+    serializer_class = ChangeOrderStatusSerializer
+    lookup_field = 'id'
+    
+    def put(self, request, *args, **kwargs):
+        response = super().partial_update(request, *args, **kwargs)
+        response.status_code = status.HTTP_202_ACCEPTED
+        return response
