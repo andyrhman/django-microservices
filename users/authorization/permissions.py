@@ -6,8 +6,9 @@ from decouple import config
 class IsAdminScope(permissions.BasePermission):
     def has_permission(self, request, view):
         token = request.COOKIES.get("user_session")
+        request.scope = None
         if not token:
-            return False
+            return True
         try:
             payload = jwt.decode(
                 token,
@@ -16,5 +17,5 @@ class IsAdminScope(permissions.BasePermission):
             )
         except jwt.PyJWTError:
             return False
-
-        return payload.get("scope") == "admin"
+        request.scope = payload.get("scope")
+        return True

@@ -129,18 +129,30 @@ class UsersAPIView(APIView):
         return Response(UserSerializer(user).data)
 
 class BulkUsersAPIView(APIView):
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = []
     permission_classes     = [IsAdminScope]
 
     def post(self, request):
         ids = request.data.get("ids", [])
         if not isinstance(ids, list):
-            return Response({"message": "ids must be a list"},
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"message": "ids must be a list"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        users     = User.objects.filter(id__in=ids)
-        serialized = UserSerializer(users, many=True).data
-        result    = {u["id"]: u for u in serialized}
+        users = User.objects.filter(id__in=ids)
+
+        is_admin = getattr(request, "scope", None) == "admin"
+
+        if is_admin:
+            serialized = UserSerializer(users, many=True).data
+        else:
+            serialized = [
+                {"id": str(u.id), "username": u.username}
+                for u in users
+            ]
+
+        result = {u["id"]: u for u in serialized}
         return Response(result, status=status.HTTP_200_OK)
     
 class TotalUsersAPIView(APIView):

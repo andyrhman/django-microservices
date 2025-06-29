@@ -56,7 +56,6 @@ class CartSerializer(serializers.ModelSerializer):
         }
 
     def get_variant(self, obj):
-        # same pattern for variants
         pm = self.context.get('product_map', {})
         prod = pm.get(str(obj.product))
         if not prod:
