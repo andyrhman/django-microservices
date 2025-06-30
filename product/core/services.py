@@ -36,10 +36,6 @@ class ReviewService:
 
     @staticmethod
     def get_reviews_by_product_id(product_id, *, timeout=10, headers=None, cookies=None):
-        """
-        Fetches all reviews for a given product from the Review MS.
-        Returns a list of review dicts.
-        """
         url = f"{ReviewService.base_url}/api/reviews/{product_id}"
         try:
             resp = requests.get(url, timeout=timeout, headers=headers or {}, cookies=cookies or {})
@@ -48,4 +44,14 @@ class ReviewService:
             raise exceptions.APIException(f"ReviewService error ({e.response.status_code}): {e.response.text}")
         except requests.RequestException as e:
             raise exceptions.APIException(f"ReviewService connection error: {str(e)}")
+        return resp.json()
+    
+    @staticmethod
+    def get_review_summary(product_id, *, timeout=5):
+        url = f"{ReviewService.base_url}/api/reviews/{product_id}/summary/"
+        try:
+            resp = requests.get(url, timeout=timeout)
+            resp.raise_for_status()
+        except requests.RequestException as e:
+            raise exceptions.APIException(f"ReviewService error: {str(e)}")
         return resp.json()

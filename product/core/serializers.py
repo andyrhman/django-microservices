@@ -17,17 +17,17 @@ class ProductImagesSerializer(serializers.ModelSerializer):
         fields = "__all__"
         
 class ProductSerializer(serializers.ModelSerializer):
-    category = serializers.SerializerMethodField()
-    products_images = ProductImagesSerializer(many=True, read_only=True)
+    category           = serializers.SerializerMethodField()
+    products_images    = ProductImagesSerializer(many=True, read_only=True)
     products_variation = ProductVariationSerializer(many=True, read_only=True)
-    reviewCount = serializers.SerializerMethodField()
-    averageRating = serializers.SerializerMethodField()
+    reviewCount        = serializers.SerializerMethodField()
+    averageRating      = serializers.SerializerMethodField()
 
     class Meta:
-        model = Product
+        model  = Product
         fields = [
-            'id','title','slug','description','image','price',
-            'category','products_images','products_variation',
+            'id', 'title', 'slug', 'description', 'image', 'price',
+            'category', 'products_images', 'products_variation',
             'created_at', 'updated_at',
             'reviewCount', 'averageRating'
         ]
@@ -36,39 +36,49 @@ class ProductSerializer(serializers.ModelSerializer):
         cats_map = self.context.get('categories_map', {})
         return cats_map.get(str(obj.category))
 
-    def get_review_data(self, obj):
-        if not hasattr(self, '_review_cache'):
-            self._review_cache = ReviewService.get_reviews_by_product_id(
-                str(obj.id)
-            )
-        return self._review_cache
+    def _get_review_summary(self, obj):
+        if not hasattr(self, '_review_summary_cache'):
+            self._review_summary_cache = {}
+        pid = str(obj.id)
+        if pid not in self._review_summary_cache:
+            summary = ReviewService.get_review_summary(pid)
+            self._review_summary_cache[pid] = summary
+        return self._review_summary_cache[pid]
 
     def get_reviewCount(self, obj):
-        reviews = self.get_review_data(obj)
-        return len(reviews)
+        summary = self._get_review_summary(obj)
+        return summary.get('review_total', 0)
 
     def get_averageRating(self, obj):
-        reviews = self.get_review_data(obj)
-        if not reviews:
-            return 0.0
-        total = sum(r.get('star', 0) for r in reviews)
-        avg = total / len(reviews)
-        return round(avg, 2)
+        summary = self._get_review_summary(obj)
+        return round(float(summary.get('average_rating', 0.0)), 2)
         
 class ProductAdminSerializer(serializers.ModelSerializer):
     category = serializers.SerializerMethodField()
-    average_rating = serializers.FloatField(read_only=True)
+    averageRating = serializers.SerializerMethodField()
 
     class Meta:
         model  = Product
-        fields = ['id','title','slug','description','image','price','category','average_rating']
+        fields = ['id','title','slug','description','image','price','category','averageRating',]
 
     def get_category(self, obj):
         cats_map = self.context.get('categories_map', {})
         return cats_map.get(str(obj.category))
+    
+    def _get_review_summary(self, obj):
+        if not hasattr(self, '_review_summary_cache'):
+            self._review_summary_cache = {}
+        pid = str(obj.id)
+        if pid not in self._review_summary_cache:
+            summary = ReviewService.get_review_summary(pid)
+            self._review_summary_cache[pid] = summary
+        return self._review_summary_cache[pid]
+
+    def get_averageRating(self, obj):
+        summary = self._get_review_summary(obj)
+        return round(float(summary.get('average_rating', 0.0)), 2)   
         
 class ProductCreateSerializer(serializers.ModelSerializer):
-    # still accept UUID on write
     category = serializers.UUIDField(write_only=True)
     images   = serializers.ListField(child=serializers.CharField(), write_only=True)
     variants = serializers.ListField(child=serializers.CharField(), write_only=True)

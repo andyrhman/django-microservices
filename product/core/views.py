@@ -206,13 +206,6 @@ class ProductsAPIView(generics.GenericAPIView):
         else:
             qs = qs.order_by("-updated_at")
 
-        # qs = qs.annotate(
-        #     average_rating=Coalesce(
-        #         Avg("review_products__star"),
-        #         Value(0.0),
-        #         output_field=FloatField()
-        #     )
-        # )
         return qs
 
     def get(self, request, *args, **kwargs):
@@ -253,17 +246,15 @@ class ProductsAPIView(generics.GenericAPIView):
 
 class ProductAvgRatingAPIView(generics.RetrieveAPIView):
     authentication_classes = []
-    permission_classes     = [AllowAny]   
+    permission_classes     = [AllowAny]
     queryset = Product.objects.all()
     lookup_field = 'id'
     serializer_class = ProductSerializer
     
     def get(self, request, *args, **kwargs):
         response = super().retrieve(request, *args, **kwargs)
-        
-        average_rating = response.data.get('averageRating')
-        
-        return Response({"averageRating": average_rating})
+        average = response.data.get('averageRating')
+        return Response({"averageRating": average})
     
 class ProductVariantsAPIView(generics.ListAPIView):
     serializer_class = ProductVariationSerializer
