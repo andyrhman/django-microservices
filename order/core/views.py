@@ -174,3 +174,25 @@ class ChangeOrderStatus(generics.UpdateAPIView):
         response = super().partial_update(request, *args, **kwargs)
         response.status_code = status.HTTP_202_ACCEPTED
         return response
+    
+class TotalOrdersAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, _):
+        order = Order.objects.all()
+        
+        total = len(order)
+        
+        return Response({"total": total})   
+
+class TotalOrderItemsAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, _):
+        order = OrderItem.objects.all()
+        
+        total = len(order)
+        
+        return Response({"total": total})   

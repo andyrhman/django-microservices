@@ -19,10 +19,13 @@ services:
       - product
       - users
       - category
+      - review
 networks:
   product:
     name: product
   users:
     external: true
   category:
+    external: true
+  review:
     external: true

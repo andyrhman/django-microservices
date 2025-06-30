@@ -206,3 +206,14 @@ class UserCartCompleteAPIView(generics.UpdateAPIView):
 
     def put(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
+    
+class TotalCartsAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, _):
+        carts = Cart.objects.all()
+        
+        total = len(carts)
+        
+        return Response({"total": total})   

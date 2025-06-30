@@ -21,6 +21,12 @@ class UserService:
             cookies=cookies,
             timeout=timeout
         )
+        
+    def get_user_by_id(user_id, *, headers=None, cookies=None, timeout=5):
+        url  = f"{UserService.base_url}/api/admin/users/{user_id}"
+        resp = requests.get(url, headers=headers or {}, cookies=cookies or {}, timeout=timeout)
+        resp.raise_for_status()
+        return resp
 
 class ProductService:
     base_url = config('PRODUCT_SERVICE_URL')

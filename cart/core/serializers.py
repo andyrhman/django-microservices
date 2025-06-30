@@ -71,30 +71,28 @@ class CartSerializer(serializers.ModelSerializer):
         
 class CartAdminSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Cart
         fields = "__all__"
         list_serializer_class = BulkUserListSerializer
 
-    def get_user(self, address):
-        request   = self.context['request']
-        token     = request.COOKIES.get('user_session')
-        scope     = "admin" if request.path.startswith("/api/admin/") else "user"
-        user_id   = str(address.user)
-
+    def get_user(self, cart):
+        uid = str(cart.user)
         users_map = self.context.get("users_map")
         if users_map is not None:
-            return users_map.get(user_id)
+            return users_map.get(uid)
 
-        resp = UserService.get(
-            f"{scope}",
-            cookies={"user_session": token},
-            timeout=5
-        )
-        if not resp.ok:
+        token = self.context['request'].COOKIES.get('user_session')
+        try:
+            resp = UserService.get_user_by_id(
+                uid,
+                cookies={"user_session": token},
+                timeout=5
+            )
+            return resp.json() if resp.ok else None
+        except Exception:
             return None
-        return resp.json()
         
 class CartCreateSerializer(serializers.ModelSerializer):
     product = serializers.UUIDField(write_only=True)

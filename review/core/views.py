@@ -3,6 +3,7 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from core.authentication import JWTAuthentication
 from core.models import Review
@@ -80,3 +81,14 @@ class AdminReviewAPIView(generics.ListAPIView, generics.RetrieveAPIView):
             context=self.get_serializer_context()
         )
         return Response(serializer.data)
+    
+class TotalReviewsItemsAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, _):
+        reviews = Review.objects.all()
+        
+        total = len(reviews)
+        
+        return Response({"total": total})   

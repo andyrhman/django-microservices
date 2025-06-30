@@ -110,6 +110,14 @@ class UsersAPIView(APIView):
     lookup_field = "user_id"
 
     def get(self, request, user_id=None):
+        is_admin = getattr(request, "scope", None) == "admin"
+
+        if not is_admin:
+            return Response(
+                {"message": "Unauthorized"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+                   
         if user_id is None:
             qs = User.objects.all()
             s = request.query_params.get("search", "")
@@ -156,10 +164,18 @@ class BulkUsersAPIView(APIView):
         return Response(result, status=status.HTTP_200_OK)
     
 class TotalUsersAPIView(APIView):
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = []
     permission_classes = [IsAdminScope]
     
     def get(self, request):
+        is_admin = getattr(request, "scope", None) == "admin"
+
+        if not is_admin:
+            return Response(
+                {"message": "Unauthorized"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+            
         users = User.objects.all()
         
         total = len(users)

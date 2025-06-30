@@ -4,7 +4,7 @@ from django.utils.text import slugify
 import re
 
 from core.models import Product, ProductImages, ProductVariation
-from core.services import CategoryService
+from core.services import CategoryService, ReviewService
 
 class ProductVariationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,36 +20,40 @@ class ProductSerializer(serializers.ModelSerializer):
     category = serializers.SerializerMethodField()
     products_images = ProductImagesSerializer(many=True, read_only=True)
     products_variation = ProductVariationSerializer(many=True, read_only=True)
-    # review_products     = ReviewSerializer(many=True, read_only=True)
-    # averageRating       = serializers.SerializerMethodField()
-    # reviewCount         = serializers.SerializerMethodField()
+    reviewCount = serializers.SerializerMethodField()
+    averageRating = serializers.SerializerMethodField()
+
     class Meta:
-        model  = Product
+        model = Product
         fields = [
             'id','title','slug','description','image','price',
             'category','products_images','products_variation',
-            'created_at', 'updated_at'
+            'created_at', 'updated_at',
+            'reviewCount', 'averageRating'
         ]
-    # class Meta:
-    #     model  = Product
-    #     fields = [
-    #         'id','title','slug','description','image','price',
-    #         'category','products_images','products_variation',
-    #         'created_at', 'updated_at',
-    #         'review_products','averageRating','reviewCount',
-    #     ]
 
     def get_category(self, obj):
         cats_map = self.context.get('categories_map', {})
         return cats_map.get(str(obj.category))
-    # def get_averageRating(self, obj):
-    #     qs = obj.review_products.all()
-    #     if not qs.exists():
-    #         return 0
-    #     return round(sum(r.star for r in qs) / qs.count(), 2)
 
-    # def get_reviewCount(self, obj):
-    #     return obj.review_products.count()
+    def get_review_data(self, obj):
+        if not hasattr(self, '_review_cache'):
+            self._review_cache = ReviewService.get_reviews_by_product_id(
+                str(obj.id)
+            )
+        return self._review_cache
+
+    def get_reviewCount(self, obj):
+        reviews = self.get_review_data(obj)
+        return len(reviews)
+
+    def get_averageRating(self, obj):
+        reviews = self.get_review_data(obj)
+        if not reviews:
+            return 0.0
+        total = sum(r.get('star', 0) for r in reviews)
+        avg = total / len(reviews)
+        return round(avg, 2)
         
 class ProductAdminSerializer(serializers.ModelSerializer):
     category = serializers.SerializerMethodField()
@@ -84,7 +88,6 @@ class ProductCreateSerializer(serializers.ModelSerializer):
             cat = CategoryService.get_category_admin(cat_id, cookies=cookies)
         except requests.HTTPError:
             raise serializers.ValidationError({'category': 'Invalid category ID'})
-        # store the validated dict on the serializer for `create`/`update`
         self._validated_category = cat
         return data
 
@@ -105,14 +108,12 @@ class ProductCreateSerializer(serializers.ModelSerializer):
             ]
             slug = f"{base_slug}-{(max(nums) if nums else 1) + 1}"
 
-        # 4) now create exactly one category kwarg
         product = Product.objects.create(
             slug     = slug,
             category=validated_data.pop('category'),
             **validated_data
         )
 
-        # 5) images & variants
         for img in images:
             ProductImages.objects.create(product=product, name=img)
         for var in variants:

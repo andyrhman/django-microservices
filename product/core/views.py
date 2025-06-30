@@ -252,18 +252,18 @@ class ProductsAPIView(generics.GenericAPIView):
         return JsonResponse(payload)
 
 class ProductAvgRatingAPIView(generics.RetrieveAPIView):
-    pass
-    # queryset = Product.objects.all()
-    # lookup_field = 'id'
-    # serializer_class = ProductSerializer
+    authentication_classes = []
+    permission_classes     = [AllowAny]   
+    queryset = Product.objects.all()
+    lookup_field = 'id'
+    serializer_class = ProductSerializer
     
-    # def get(self, request, *args, **kwargs):
-    #     response = super().retrieve(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        response = super().retrieve(request, *args, **kwargs)
         
-    #     # ? We will fetch only the averageRating to show in the response
-    #     average_rating = response.data.get('averageRating')
+        average_rating = response.data.get('averageRating')
         
-    #     return Response({"averageRating": average_rating})
+        return Response({"averageRating": average_rating})
     
 class ProductVariantsAPIView(generics.ListAPIView):
     serializer_class = ProductVariationSerializer
@@ -356,3 +356,14 @@ class ProductCategoryCountAPIView(APIView):
         qs = Product.objects.values('category').annotate(count=Count('id'))
         data = list(qs)
         return JsonResponse(data, safe=False)
+    
+class TotalProductsAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, _):
+        product = Product.objects.all()
+        
+        total = len(product)
+        
+        return Response({"total": total})   
