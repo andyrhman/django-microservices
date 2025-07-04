@@ -1,8 +1,7 @@
 services:
   shop_email:
     container_name: shop_email
-    build: 
-      context: .
-      dockerfile: Dockerfile.dev
+    build: .
+    image: tataran/drfshop_email:0.0.2
     env_file:
       - .env

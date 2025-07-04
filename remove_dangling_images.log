@@ -1,0 +1,167 @@
+2025-07-03 15:09:36,705 [INFO] Starting remove_dangling_images.py (dry_run=False)
+2025-07-03 15:09:36,706 [DEBUG] Trying paths: ['/home/tataran/.docker/config.json', '/home/tataran/.dockercfg']
+2025-07-03 15:09:36,706 [DEBUG] Found file at path: /home/tataran/.docker/config.json
+2025-07-03 15:09:36,706 [DEBUG] Found 'auths' section
+2025-07-03 15:09:36,706 [DEBUG] Found entry (registry='ghcr.io', username='USERNAME')
+2025-07-03 15:09:36,717 [DEBUG] http://localhost:None "GET /version HTTP/1.1" 200 854
+2025-07-03 15:09:36,718 [DEBUG] Connected to Docker daemon: http+docker://localhost
+2025-07-03 15:09:36,718 [INFO] Listing dangling images...
+2025-07-03 15:09:36,727 [DEBUG] http://localhost:None "GET /v1.47/images/json?only_ids=0&all=0&filters=%7B%22dangling%22%3A+%5B%22true%22%5D%7D HTTP/1.1" 200 None
+2025-07-03 15:09:36,734 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:17835c428d742f0727f9ae1e3f832ae6c1092aabcef4fc56afa681a2489b7d19/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,737 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:19e2dee3dcd197e21a3e18c4dd5cba27cafc227d257bcbb70d8b9395b9d8c1ec/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,741 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:3024fa4e0385969ad65e4da50c520bc35cda2e6875db3d7cc154c9e9f525c103/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,744 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:97bbd63378a7589369d2506fe48ce5e564f85595a8e3251863c3fcf9f9bdb3c0/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,748 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:92601f9ec2cb40c45c171de50dbdf75ffcb291d8cea513b625785b031c8cc274/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,751 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:250c6af7cc55657b386441252cae6c077b5f2b10ea17ddb77550a380cef4aab5/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,754 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:8abfed62bc42af786bd96eedbba1994d96fba5adf5e27a577ee24076d6acc495/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,757 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:58478c12770f499d442fce446c79418c08d9ad3c3bc850ee6b9d14f0e4674040/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,761 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:1f95a09a418872b0997ed23d62efe3a00ff2a2c2de208cd76ed89dcbb5a3cbef/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,766 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:e418dee0ca7fc036380c5c13ea35a8e75cc12dd87390038eb6a240044d38c5b2/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,769 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:f5944c9996862d45f3ddb548fe560444051d65540a9f89bd265bd77860e60419/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,773 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:a69cc361919b38bc5915f533c916d2b7462ba589ac3cc620f78a45732512aebe/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,776 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:fe7b6974354c2bea787c7f76e6d3d602cc03566beb10de390db8081aaea12cf9/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,779 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:e15c50670aefd7488ce2467f412c6def48fb98adcfedf6fa3d0bdd3ecfffaa38/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,783 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:36ffc0706654e2df3ba576e41ee5d41f6acd206f92a501f9ca2e01996b5f2f10/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,787 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:6ec6849fb4e62e260509b127dfe11f68e7f5839a24dc9db249e5425a3c17775f/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,791 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:ffa1642ccb4dbfa9ab03db12e36b99f1183ed342724c9aa3522697a26912b32e/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,794 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:fcc159a1736c922822acd23d185fd554c6b3661bbb8e32d2c13dea9b03a758a8/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,797 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:4fe30c9cece76dc0ab6d9989f1f1e078f284fa782dade46516b629c655037c88/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,801 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:a507bc6cd797f1370ca96974a41460837874212cd118a8effb55d59c3fe45c8e/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,804 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:256281d7a4d551a3729115f7bee63db314d6a233434286cdc754edcb321fe875/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,808 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:08309cf5e15409911dd3a4bf851915a7019fbf902da4722304c6ce2a51d74e5c/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,814 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:5c32fba4b692e7fca5240834560c31848d0e45fab4ac6900038e54955f7c52d9/json HTTP/1.1" 200 None
+2025-07-03 15:09:36,815 [INFO] Found 23 dangling image(s)
+2025-07-03 15:11:48,089 [INFO] Starting remove_dangling_images.py (dry_run=False)
+2025-07-03 15:11:48,090 [DEBUG] Trying paths: ['/home/tataran/.docker/config.json', '/home/tataran/.dockercfg']
+2025-07-03 15:11:48,090 [DEBUG] Found file at path: /home/tataran/.docker/config.json
+2025-07-03 15:11:48,090 [DEBUG] Found 'auths' section
+2025-07-03 15:11:48,090 [DEBUG] Found entry (registry='ghcr.io', username='USERNAME')
+2025-07-03 15:11:48,099 [DEBUG] http://localhost:None "GET /version HTTP/1.1" 200 854
+2025-07-03 15:11:48,100 [DEBUG] Connected to Docker daemon: http+docker://localhost
+2025-07-03 15:11:48,108 [DEBUG] http://localhost:None "GET /v1.47/images/json?only_ids=0&all=0&filters=%7B%22dangling%22%3A+%5B%22true%22%5D%7D HTTP/1.1" 200 None
+2025-07-03 15:11:48,110 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:17835c428d742f0727f9ae1e3f832ae6c1092aabcef4fc56afa681a2489b7d19/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,238 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:19e2dee3dcd197e21a3e18c4dd5cba27cafc227d257bcbb70d8b9395b9d8c1ec/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,240 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:3024fa4e0385969ad65e4da50c520bc35cda2e6875db3d7cc154c9e9f525c103/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,242 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:97bbd63378a7589369d2506fe48ce5e564f85595a8e3251863c3fcf9f9bdb3c0/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,244 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:92601f9ec2cb40c45c171de50dbdf75ffcb291d8cea513b625785b031c8cc274/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,246 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:250c6af7cc55657b386441252cae6c077b5f2b10ea17ddb77550a380cef4aab5/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,248 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:8abfed62bc42af786bd96eedbba1994d96fba5adf5e27a577ee24076d6acc495/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,250 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:58478c12770f499d442fce446c79418c08d9ad3c3bc850ee6b9d14f0e4674040/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,252 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:1f95a09a418872b0997ed23d62efe3a00ff2a2c2de208cd76ed89dcbb5a3cbef/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,255 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:e418dee0ca7fc036380c5c13ea35a8e75cc12dd87390038eb6a240044d38c5b2/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,257 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:f5944c9996862d45f3ddb548fe560444051d65540a9f89bd265bd77860e60419/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,259 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:a69cc361919b38bc5915f533c916d2b7462ba589ac3cc620f78a45732512aebe/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,261 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:fe7b6974354c2bea787c7f76e6d3d602cc03566beb10de390db8081aaea12cf9/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,263 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:e15c50670aefd7488ce2467f412c6def48fb98adcfedf6fa3d0bdd3ecfffaa38/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,265 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:36ffc0706654e2df3ba576e41ee5d41f6acd206f92a501f9ca2e01996b5f2f10/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,267 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:6ec6849fb4e62e260509b127dfe11f68e7f5839a24dc9db249e5425a3c17775f/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,268 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:ffa1642ccb4dbfa9ab03db12e36b99f1183ed342724c9aa3522697a26912b32e/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,270 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:fcc159a1736c922822acd23d185fd554c6b3661bbb8e32d2c13dea9b03a758a8/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,272 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:4fe30c9cece76dc0ab6d9989f1f1e078f284fa782dade46516b629c655037c88/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,273 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:a507bc6cd797f1370ca96974a41460837874212cd118a8effb55d59c3fe45c8e/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,275 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:256281d7a4d551a3729115f7bee63db314d6a233434286cdc754edcb321fe875/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,277 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:08309cf5e15409911dd3a4bf851915a7019fbf902da4722304c6ce2a51d74e5c/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,279 [DEBUG] http://localhost:None "GET /v1.47/images/sha256:5c32fba4b692e7fca5240834560c31848d0e45fab4ac6900038e54955f7c52d9/json HTTP/1.1" 200 None
+2025-07-03 15:11:35,279 [INFO] Found 23 dangling image(s)
+2025-07-03 15:11:35,279 [INFO]   • 17835c428d74 (created: 2025-06-28T21:24:36.631016339+08:00)
+2025-07-03 15:11:35,280 [INFO]   • 19e2dee3dcd1 (created: 2025-06-27T15:47:14.653661893+08:00)
+2025-07-03 15:11:35,280 [INFO]   • 3024fa4e0385 (created: 2025-06-26T15:55:08.346141618+08:00)
+2025-07-03 15:11:35,280 [INFO]   • 97bbd63378a7 (created: 2025-06-25T17:12:13.150217622+08:00)
+2025-07-03 15:11:35,280 [INFO]   • 92601f9ec2cb (created: 2025-06-24T19:25:36.387168583+08:00)
+2025-07-03 15:11:35,280 [INFO]   • 250c6af7cc55 (created: 2025-06-24T19:24:58.536074897+08:00)
+2025-07-03 15:11:35,280 [INFO]   • 8abfed62bc42 (created: 2025-06-24T16:55:34.23137657+08:00)
+2025-07-03 15:11:35,280 [INFO]   • 58478c12770f (created: 2025-06-24T15:23:23.888547242+08:00)
+2025-07-03 15:11:35,280 [INFO]   • 1f95a09a4188 (created: 2025-06-24T15:17:44.195674241+08:00)
+2025-07-03 15:11:35,280 [INFO]   • e418dee0ca7f (created: 2025-06-23T17:28:41.61186182+08:00)
+2025-07-03 15:11:35,280 [INFO]   • f5944c999686 (created: 2025-06-21T19:22:14.727428+08:00)
+2025-07-03 15:11:35,281 [INFO]   • a69cc361919b (created: 2025-06-21T19:11:20.204030034+08:00)
+2025-07-03 15:11:35,281 [INFO]   • fe7b6974354c (created: 2025-06-21T15:37:52.582580974+08:00)
+2025-07-03 15:11:35,281 [INFO]   • e15c50670aef (created: 2025-06-21T15:35:50.493625697+08:00)
+2025-07-03 15:11:35,281 [INFO]   • 36ffc0706654 (created: 2025-06-21T15:30:52.313250052+08:00)
+2025-07-03 15:11:35,281 [INFO]   • 6ec6849fb4e6 (created: 2025-06-21T14:51:17.782293235+08:00)
+2025-07-03 15:11:35,281 [INFO]   • ffa1642ccb4d (created: 2025-06-21T14:47:31.067041319+08:00)
+2025-07-03 15:11:35,281 [INFO]   • fcc159a1736c (created: 2025-06-21T14:46:44.655136897+08:00)
+2025-07-03 15:11:35,281 [INFO]   • 4fe30c9cece7 (created: 2025-06-20T20:14:37.810952304+08:00)
+2025-07-03 15:11:35,281 [INFO]   • a507bc6cd797 (created: 2025-06-20T20:06:53.745490285+08:00)
+2025-07-03 15:11:35,282 [INFO]   • 256281d7a4d5 (created: 2025-06-20T19:22:54.323233203+08:00)
+2025-07-03 15:11:35,282 [INFO]   • 08309cf5e154 (created: 2025-06-20T19:22:10.684201977+08:00)
+2025-07-03 15:11:35,282 [INFO]   • 5c32fba4b692 (created: 2025-02-22T14:55:52.372953121+08:00)
+2025-07-03 15:11:35,282 [INFO] Removing image 17835c428d74...
+2025-07-03 15:11:35,287 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:17835c428d742f0727f9ae1e3f832ae6c1092aabcef4fc56afa681a2489b7d19?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,287 [INFO] Removed 17835c428d74 successfully
+2025-07-03 15:11:35,288 [INFO] Removing image 19e2dee3dcd1...
+2025-07-03 15:11:35,290 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:19e2dee3dcd197e21a3e18c4dd5cba27cafc227d257bcbb70d8b9395b9d8c1ec?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,291 [INFO] Removed 19e2dee3dcd1 successfully
+2025-07-03 15:11:35,291 [INFO] Removing image 3024fa4e0385...
+2025-07-03 15:11:35,295 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:3024fa4e0385969ad65e4da50c520bc35cda2e6875db3d7cc154c9e9f525c103?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,295 [INFO] Removed 3024fa4e0385 successfully
+2025-07-03 15:11:35,295 [INFO] Removing image 97bbd63378a7...
+2025-07-03 15:11:35,301 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:97bbd63378a7589369d2506fe48ce5e564f85595a8e3251863c3fcf9f9bdb3c0?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,302 [INFO] Removed 97bbd63378a7 successfully
+2025-07-03 15:11:35,302 [INFO] Removing image 92601f9ec2cb...
+2025-07-03 15:11:35,309 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:92601f9ec2cb40c45c171de50dbdf75ffcb291d8cea513b625785b031c8cc274?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,310 [INFO] Removed 92601f9ec2cb successfully
+2025-07-03 15:11:35,310 [INFO] Removing image 250c6af7cc55...
+2025-07-03 15:11:35,314 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:250c6af7cc55657b386441252cae6c077b5f2b10ea17ddb77550a380cef4aab5?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,315 [INFO] Removed 250c6af7cc55 successfully
+2025-07-03 15:11:35,315 [INFO] Removing image 8abfed62bc42...
+2025-07-03 15:11:35,319 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:8abfed62bc42af786bd96eedbba1994d96fba5adf5e27a577ee24076d6acc495?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,320 [INFO] Removed 8abfed62bc42 successfully
+2025-07-03 15:11:35,320 [INFO] Removing image 58478c12770f...
+2025-07-03 15:11:35,323 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:58478c12770f499d442fce446c79418c08d9ad3c3bc850ee6b9d14f0e4674040?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,324 [INFO] Removed 58478c12770f successfully
+2025-07-03 15:11:35,324 [INFO] Removing image 1f95a09a4188...
+2025-07-03 15:11:35,328 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:1f95a09a418872b0997ed23d62efe3a00ff2a2c2de208cd76ed89dcbb5a3cbef?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,329 [INFO] Removed 1f95a09a4188 successfully
+2025-07-03 15:11:35,329 [INFO] Removing image e418dee0ca7f...
+2025-07-03 15:11:35,333 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:e418dee0ca7fc036380c5c13ea35a8e75cc12dd87390038eb6a240044d38c5b2?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,333 [INFO] Removed e418dee0ca7f successfully
+2025-07-03 15:11:35,334 [INFO] Removing image f5944c999686...
+2025-07-03 15:11:35,337 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:f5944c9996862d45f3ddb548fe560444051d65540a9f89bd265bd77860e60419?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,337 [INFO] Removed f5944c999686 successfully
+2025-07-03 15:11:35,337 [INFO] Removing image a69cc361919b...
+2025-07-03 15:11:35,341 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:a69cc361919b38bc5915f533c916d2b7462ba589ac3cc620f78a45732512aebe?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,341 [INFO] Removed a69cc361919b successfully
+2025-07-03 15:11:35,341 [INFO] Removing image fe7b6974354c...
+2025-07-03 15:11:35,345 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:fe7b6974354c2bea787c7f76e6d3d602cc03566beb10de390db8081aaea12cf9?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,346 [INFO] Removed fe7b6974354c successfully
+2025-07-03 15:11:35,346 [INFO] Removing image e15c50670aef...
+2025-07-03 15:11:35,349 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:e15c50670aefd7488ce2467f412c6def48fb98adcfedf6fa3d0bdd3ecfffaa38?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,350 [INFO] Removed e15c50670aef successfully
+2025-07-03 15:11:35,350 [INFO] Removing image 36ffc0706654...
+2025-07-03 15:11:35,354 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:36ffc0706654e2df3ba576e41ee5d41f6acd206f92a501f9ca2e01996b5f2f10?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,354 [INFO] Removed 36ffc0706654 successfully
+2025-07-03 15:11:35,354 [INFO] Removing image 6ec6849fb4e6...
+2025-07-03 15:11:35,357 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:6ec6849fb4e62e260509b127dfe11f68e7f5839a24dc9db249e5425a3c17775f?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,357 [INFO] Removed 6ec6849fb4e6 successfully
+2025-07-03 15:11:35,358 [INFO] Removing image ffa1642ccb4d...
+2025-07-03 15:11:35,361 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:ffa1642ccb4dbfa9ab03db12e36b99f1183ed342724c9aa3522697a26912b32e?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,361 [INFO] Removed ffa1642ccb4d successfully
+2025-07-03 15:11:35,361 [INFO] Removing image fcc159a1736c...
+2025-07-03 15:11:35,364 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:fcc159a1736c922822acd23d185fd554c6b3661bbb8e32d2c13dea9b03a758a8?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,364 [INFO] Removed fcc159a1736c successfully
+2025-07-03 15:11:35,364 [INFO] Removing image 4fe30c9cece7...
+2025-07-03 15:11:35,367 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:4fe30c9cece76dc0ab6d9989f1f1e078f284fa782dade46516b629c655037c88?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,367 [INFO] Removed 4fe30c9cece7 successfully
+2025-07-03 15:11:35,368 [INFO] Removing image a507bc6cd797...
+2025-07-03 15:11:35,370 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:a507bc6cd797f1370ca96974a41460837874212cd118a8effb55d59c3fe45c8e?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,370 [INFO] Removed a507bc6cd797 successfully
+2025-07-03 15:11:35,370 [INFO] Removing image 256281d7a4d5...
+2025-07-03 15:11:35,373 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:256281d7a4d551a3729115f7bee63db314d6a233434286cdc754edcb321fe875?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,373 [INFO] Removed 256281d7a4d5 successfully
+2025-07-03 15:11:35,373 [INFO] Removing image 08309cf5e154...
+2025-07-03 15:11:35,376 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:08309cf5e15409911dd3a4bf851915a7019fbf902da4722304c6ce2a51d74e5c?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,376 [INFO] Removed 08309cf5e154 successfully
+2025-07-03 15:11:35,377 [INFO] Removing image 5c32fba4b692...
+2025-07-03 15:11:35,380 [DEBUG] http://localhost:None "DELETE /v1.47/images/sha256:5c32fba4b692e7fca5240834560c31848d0e45fab4ac6900038e54955f7c52d9?force=False&noprune=False HTTP/1.1" 200 88
+2025-07-03 15:11:35,380 [INFO] Removed 5c32fba4b692 successfully
+2025-07-03 15:12:25,763 [INFO] Starting remove_dangling_images.py (dry_run=False)
+2025-07-03 15:12:25,763 [DEBUG] Trying paths: ['/home/tataran/.docker/config.json', '/home/tataran/.dockercfg']
+2025-07-03 15:12:25,763 [DEBUG] Found file at path: /home/tataran/.docker/config.json
+2025-07-03 15:12:25,764 [DEBUG] Found 'auths' section
+2025-07-03 15:12:25,764 [DEBUG] Found entry (registry='ghcr.io', username='USERNAME')
+2025-07-03 15:12:25,773 [DEBUG] http://localhost:None "GET /version HTTP/1.1" 200 854
+2025-07-03 15:12:25,774 [DEBUG] Connected to Docker daemon: http+docker://localhost
+2025-07-03 15:12:25,779 [DEBUG] http://localhost:None "GET /v1.47/images/json?only_ids=0&all=0&filters=%7B%22dangling%22%3A+%5B%22true%22%5D%7D HTTP/1.1" 200 3
+2025-07-03 15:12:25,779 [INFO] Found 0 dangling image(s)
+2025-07-03 15:12:25,779 [INFO] Nothing to delete, exiting.

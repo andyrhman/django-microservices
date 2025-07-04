@@ -96,3 +96,6 @@ local_settings.py
 shopemail/
 
 static/img
+ca.pem
+service.key
+service.cert

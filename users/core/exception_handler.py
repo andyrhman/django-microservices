@@ -23,18 +23,14 @@ def custom_exception_handler(exc, context):
 
     response = exception_handler(exc, context)
 
-    # If DRF didn’t handle it (response is None), it’s an unexpected 500
     if response is None:
         if settings.DEBUG:
-            # In development, re‑raise so you get the full Django debug page
             raise exc
-        # In production, swallow it into a safe JSON
         return Response(
             {"message": "Internal server error"},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
-    # DRF gave us a response: normalize its shape
     data = response.data
 
     if 'detail' in data:

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shop-email
+  labels:
+    io.kompose.service: shop-email
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: shop-email
+  template:
+    metadata:
+      labels:
+        io.kompose.service: shop-email
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: shop-email
+          image: ghcr.io/andyrhman/drfshop_email:0.0.3
+          envFrom:
+            - secretRef:
+                name: shop-email-env
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+      restartPolicy: Always

@@ -14,11 +14,26 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+from django.http import JsonResponse
 from django.urls import include, path
+from rest_framework import status
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('api/admin/', include(('core.urls_admin', 'cart'), namespace='admin_cart')),   
     path('api/', include(('core.urls', 'cart'), namespace='user_cart')),   
 ]
+
+def custom_404(request, exception):
+    return JsonResponse(
+        {"detail": "Not found."},
+        status=status.HTTP_404_NOT_FOUND
+    )
+
+def custom_500(request):
+    return JsonResponse(
+        {"detail": "Internal server error."},
+        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+    )
+
+handler404 = 'app.urls.custom_404'
+handler500 = 'app.urls.custom_500'
