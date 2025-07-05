@@ -22,7 +22,7 @@ from rest_framework import status
 urlpatterns = [
     path('api/admin/', include(('authorization.urls', 'auth'), namespace='admin_auth')),
     path('api/user/',  include(('authorization.urls', 'user'), namespace='user_auth')),
-    path('api/', include(('authorization.urls_verify', 'verify'), namespace='user_verify')),
+    path('api/verify/', include(('authorization.urls_verify', 'verify'), namespace='user_verify')),
 ]
 
 def custom_404(request, exception):

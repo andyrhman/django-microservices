@@ -14,5 +14,5 @@ class ProductService:
 
     @classmethod
     def counts_by_category(cls, *, cookies=None, timeout=3):
-        data = cls.get("product-category-counts", cookies=cookies, timeout=timeout)
+        data = cls.get("products/product-category-counts", cookies=cookies, timeout=timeout)
         return data

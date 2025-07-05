@@ -279,8 +279,8 @@ class ProductIdAPIView(generics.RetrieveAPIView):
     lookup_field = 'id'
     
     def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)   
-
+        return self.retrieve(request, *args, **kwargs)
+    
 class ProductPriceFilterAPIView(generics.ListAPIView):
     serializer_class = ProductSerializer
     

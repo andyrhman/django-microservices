@@ -36,7 +36,7 @@ class ProductService:
 
     @staticmethod
     def get_product_by_id(pid, *, timeout=10):
-        url  = f"{ProductService.base_url}/api/product-id/{pid}"
+        url  = f"{ProductService.base_url}/api/products/product-id/{pid}"
         resp = requests.get(url, timeout=timeout)
         resp.raise_for_status()
         return resp.json()

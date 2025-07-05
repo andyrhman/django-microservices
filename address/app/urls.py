@@ -20,9 +20,8 @@ from django.urls import include, path
 from rest_framework import status
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/admin/', include(('core.urls_admin', 'address'), namespace='admin_address')),
-    path('api/', include(('core.urls', 'address'), namespace='user_address')),   
+    path('api/admin/address/', include(('core.urls_admin', 'address'), namespace='admin_address')),
+    path('api/address/', include(('core.urls', 'address'), namespace='user_address')),   
 ]
 
 def custom_404(request, exception):

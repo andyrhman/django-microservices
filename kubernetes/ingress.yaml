@@ -8,6 +8,14 @@ spec:
   rules:
     - http:
         paths:
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name: root-backend-svc
+                port:
+                  number: 80
+
           - path: /api/admin/
             pathType: Prefix
             backend:
@@ -24,13 +32,31 @@ spec:
                 port:
                   number: 8001
 
-          - path: /api/
+          - path: /api/verify/
             pathType: Prefix
             backend:
               service:
                 name: shop-users-service
                 port:
                   number: 8001
+
+          # ───────────────────── ADDRESS MICROSERVICE ─────────────────────
+
+          - path: /api/admin/addresses/
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-address-service
+                port:
+                  number: 8002
+
+          - path: /api/addresses/
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-address-service
+                port:
+                  number: 8002
 
           # ──────────────────────── PRODUCT MICROSERVICE ────────────────────────
           # Admin product management (create/update/delete)
@@ -68,22 +94,7 @@ spec:
           #       port:
           #         number: 8003
 
-          # # ───────────────────── ADDRESS MICROSERVICE ─────────────────────
-          # - path: /api/admin/addresses/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: address-admin-svc
-          #       port:
-          #         number: 8004
 
-          # - path: /api/addresses/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: address-user-svc
-          #       port:
-          #         number: 8004
 
           # # ───────────────────── CART MICROSERVICE ─────────────────────
           # - path: /api/admin/carts/

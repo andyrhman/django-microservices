@@ -27,7 +27,7 @@ class OrderService:
 
     @staticmethod
     def get_user_orders(*, timeout=10, headers=None, cookies=None):
-        url = f"{OrderService.base_url}/api/order-user"
+        url = f"{OrderService.base_url}/api/orders/order-user"
         resp = requests.get(url, timeout=timeout, cookies=cookies)
         try:
             resp.raise_for_status()
@@ -50,4 +50,4 @@ class ProductService:
     
     @classmethod
     def get_product_by_id(cls, product_id, *, timeout=10):
-        return cls.get(f"product-id/{product_id}", timeout=timeout)
+        return cls.get(f"products/product-id/{product_id}", timeout=timeout)

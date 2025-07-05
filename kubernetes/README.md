@@ -145,3 +145,9 @@ Also do not forget to start *minikube tunnel* to create the network route
 ```bash
 minikube tunnel
 ```
+
+Check if the external ip is running
+
+```bash
+kubectl get svc ingress-nginx-controller -n ingress-nginx
+```

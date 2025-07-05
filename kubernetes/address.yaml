@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: shop-address
+  name: shop-address
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: shop-address
+  template:
+    metadata:
+      labels:
+        io.kompose.service: shop-address
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - envFrom:
+            - secretRef:
+                name: shop-address-env
+          image: ghcr.io/andyrhman/drfshop_address:0.0.1
+          name: shop-address
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: shop-address-service
+  name: shop-address-service
+spec:
+  ports:
+    - name: "8002"
+      port: 8002
+      targetPort: 8000
+  selector:
+    io.kompose.service: shop-address
+
+

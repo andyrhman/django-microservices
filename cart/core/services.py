@@ -40,7 +40,4 @@ class ProductService:
 
     @classmethod
     def get_product_by_id(cls, product_id, *, timeout=10):
-        """
-        GET /api/product-id/{uuid}/
-        """
-        return cls.get(f"product-id/{product_id}", timeout=timeout)
+        return cls.get(f"products/product-id/{product_id}", timeout=timeout)
