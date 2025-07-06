@@ -10,4 +10,8 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:8000"]
+RUN mkdir -p /app/staticfiles
+
+RUN python manage.py collectstatic --noinput
+
+CMD ["gunicorn", "app.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3", "--threads", "2", "--timeout", "120"]

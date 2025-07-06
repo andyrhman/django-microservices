@@ -14,14 +14,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.http import JsonResponse
 from django.urls import include, path
 from rest_framework import status
 
 urlpatterns = [
-    path('api/admin/address/', include(('core.urls_admin', 'address'), namespace='admin_address')),
-    path('api/address/', include(('core.urls', 'address'), namespace='user_address')),   
+    path('api/admin/', include(('core.urls_admin', 'address'), namespace='admin_address')),
+    path('api/', include(('core.urls', 'address'), namespace='user_address')),   
 ]
 
 def custom_404(request, exception):

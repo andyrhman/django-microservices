@@ -20,7 +20,7 @@ spec:
         - envFrom:
             - secretRef:
                 name: shop-users-env
-          image: ghcr.io/andyrhman/drfshop_users:0.0.2
+          image: ghcr.io/andyrhman/drfshop_users:0.0.3
           name: shop-users
           ports:
             - containerPort: 8000

@@ -2,6 +2,6 @@ services:
   shop_email:
     container_name: shop_email
     build: .
-    image: tataran/drfshop_email:0.0.2
+    image: tataran/drfshop_email:0.0.4
     env_file:
       - .env

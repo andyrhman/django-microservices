@@ -151,3 +151,31 @@ Check if the external ip is running
 ```bash
 kubectl get svc ingress-nginx-controller -n ingress-nginx
 ```
+
+## Push container to github and configure the secret
+
+Configure first the secret
+
+```bash
+kubectl create secret docker-registry ghcr-secret \
+  --docker-server=ghcr.io \
+  --docker-username=yourgithubusername \
+  --docker-password=$GHCR_PAT \
+  --docker-email=yougithubremail
+
+export GHCR_PAT=ghp_yourgithubtoken
+```
+
+Push it to github container
+
+```bash
+docker push ghcr.io/andyrhman/imagename:0.0.3
+```
+
+Don't forget to put ghcr-secret inside your yaml file
+
+```yaml
+spec:
+  imagePullSecrets:
+    - name: ghcr-secret
+```

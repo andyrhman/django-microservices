@@ -18,7 +18,7 @@ spec:
         - name: ghcr-secret
       containers:
         - name: shop-email
-          image: ghcr.io/andyrhman/drfshop_email:0.0.3
+          image: ghcr.io/andyrhman/drfshop_email:0.0.4
           envFrom:
             - secretRef:
                 name: shop-email-env

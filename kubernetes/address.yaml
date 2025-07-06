@@ -20,11 +20,23 @@ spec:
         - envFrom:
             - secretRef:
                 name: shop-address-env
-          image: ghcr.io/andyrhman/drfshop_address:0.0.1
+          image: ghcr.io/andyrhman/drfshop_address:0.0.11
           name: shop-address
           ports:
             - containerPort: 8000
               protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /api/address/health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/address/health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
 ---
 apiVersion: v1
 kind: Service

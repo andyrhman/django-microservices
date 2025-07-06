@@ -1,7 +1,7 @@
 from rest_framework import exceptions, mixins, status
 from rest_framework import generics
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from core.models import Address
@@ -59,3 +59,13 @@ class AddressDetailAPIView(
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+    
+class HealthCheckAPIView(ListAPIView):
+    authentication_classes = []
+    permission_classes     = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        return Response(
+            {"status": "✅ ok", "message": "🏃‍♀️‍➡️ service is running"},
+            status=status.HTTP_200_OK
+        )

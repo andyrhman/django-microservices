@@ -15,7 +15,7 @@ class BulkUserListSerializer(serializers.ListSerializer):
             f"{scope}/users/bulk",
             json={"ids": ids},
             cookies={"user_session": token},
-            timeout=5
+            timeout=20
         )
         users_map = resp.ok and resp.json() or {}
 
@@ -47,7 +47,7 @@ class AddressSerializer(serializers.ModelSerializer):
         resp = UserService.get(
             f"{scope}",
             cookies={"user_session": token},
-            timeout=5
+            timeout=20
         )
         if not resp.ok:
             return None
