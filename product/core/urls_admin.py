@@ -4,11 +4,11 @@ from core.views import ProductImagesCDAPIView, ProductListCreateAPIView, Product
 
 
 urlpatterns = [
-    path('', ProductListCreateAPIView.as_view()),
-    path('<str:id>', ProductRUDAPIView.as_view()),
-    path('product-variants', ProductVariantCDAPIView.as_view()),
-    path('product-variants/<str:id>', ProductVariantCDAPIView.as_view()),
-    path('product-images', ProductImagesCDAPIView.as_view()),
-    path('product-images/<str:id>', ProductImagesCDAPIView.as_view()),
-    path('total-products', TotalProductsAPIView.as_view()),
+    path('products', ProductListCreateAPIView.as_view()),
+    path('products/<str:id>', ProductRUDAPIView.as_view()),
+    path('products/product-variants', ProductVariantCDAPIView.as_view()),
+    path('products/product-variants/<str:id>', ProductVariantCDAPIView.as_view()),
+    path('products/product-images', ProductImagesCDAPIView.as_view()),
+    path('products/product-images/<str:id>', ProductImagesCDAPIView.as_view()),
+    path('products/total-products/', TotalProductsAPIView.as_view()),
 ]

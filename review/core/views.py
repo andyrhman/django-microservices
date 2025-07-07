@@ -2,7 +2,7 @@ from django.db.models import Avg, Count
 from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework import permissions
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -122,4 +122,14 @@ class TotalReviewsItemsAPIView(APIView):
         
         total = len(reviews)
         
-        return Response({"total": total})   
+        return Response({"total": total})
+    
+class HealthCheckAPIView(generics.ListAPIView):
+    authentication_classes = []
+    permission_classes     = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        return Response(
+            {"status": "✅ ok", "message": "🏃‍♀️‍➡️ service is running"},
+            status=status.HTTP_200_OK
+        )

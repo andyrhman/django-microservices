@@ -51,9 +51,7 @@ spec:
                 name: shop-users-service
                 port:
                   number: 8001
-
           # ───────────────────── ADDRESS MICROSERVICE ─────────────────────
-
           - path: /api/admin/address
             pathType: Prefix
             backend:
@@ -70,91 +68,87 @@ spec:
                 port:
                   number: 8002
 
+          # ───────────────────── CATEGORY MICROSERVICE ─────────────────────
+          - path: /api/admin/categories
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-category-service
+                port:
+                  number: 8003
+
+          - path: /api/categories
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-category-service
+                port:
+                  number: 8003
+
           # ──────────────────────── PRODUCT MICROSERVICE ────────────────────────
-          # Admin product management (create/update/delete)
-          # - path: /api/admin/products/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: product-admin-svc
-          #       port:
-          #         number: 8002
+          - path: /api/admin/products
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-product-service
+                port:
+                  number: 8004
 
-          # # Public product catalog (list, detail)
-          # - path: /api/products/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: product-user-svc
-          #       port:
-          #         number: 8002
+          - path: /api/products
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-product-service
+                port:
+                  number: 8004
 
-          # # ───────────────────── CATEGORY MICROSERVICE ─────────────────────
-          # - path: /api/admin/categories/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: category-admin-svc
-          #       port:
-          #         number: 8003
+          # ───────────────────── CART MICROSERVICE ─────────────────────
+          - path: /api/admin/carts
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-cart-service
+                port:
+                  number: 8005
 
-          # - path: /api/categories/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: category-user-svc
-          #       port:
-          #         number: 8003
+          - path: /api/carts
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-cart-service
+                port:
+                  number: 8005
 
+          # ───────────────────── ORDER MICROSERVICE ─────────────────────
+          - path: /api/admin/orders
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-order-service
+                port:
+                  number: 8006
 
+          - path: /api/orders
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-order-service
+                port:
+                  number: 8006
 
-          # # ───────────────────── CART MICROSERVICE ─────────────────────
-          # - path: /api/admin/carts/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: cart-admin-svc
-          #       port:
-          #         number: 8005
+          # ───────────────────── REVIEW MICROSERVICE ─────────────────────
+          - path: /api/admin/reviews
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-review-service
+                port:
+                  number: 8007
 
-          # - path: /api/carts/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: cart-user-svc
-          #       port:
-          #         number: 8005
-
-          # # ───────────────────── ORDER MICROSERVICE ─────────────────────
-          # - path: /api/admin/orders/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: order-admin-svc
-          #       port:
-          #         number: 8006
-
-          # - path: /api/orders/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: order-user-svc
-          #       port:
-          #         number: 8006
-
-          # # ───────────────────── REVIEW MICROSERVICE ─────────────────────
-          # - path: /api/admin/reviews/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: review-admin-svc
-          #       port:
-          #         number: 8007
-
-          # - path: /api/reviews/
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: review-user-svc
-          #       port:
-          #         number: 8007
+          - path: /api/reviews
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-review-service
+                port:
+                  number: 8007

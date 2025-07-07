@@ -357,4 +357,14 @@ class TotalProductsAPIView(APIView):
         
         total = len(product)
         
-        return Response({"total": total})   
+        return Response({"total": total})
+    
+class HealthCheckAPIView(generics.ListAPIView):
+    authentication_classes = []
+    permission_classes     = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        return Response(
+            {"status": "✅ ok", "message": "🏃‍♀️‍➡️ service is running"},
+            status=status.HTTP_200_OK
+        )    

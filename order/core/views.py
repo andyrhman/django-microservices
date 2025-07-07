@@ -4,7 +4,7 @@ import stripe
 from decouple import config
 from django.db import transaction
 from rest_framework.exceptions import NotFound, ValidationError
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -196,3 +196,13 @@ class TotalOrderItemsAPIView(APIView):
         total = len(order)
         
         return Response({"total": total})   
+    
+class HealthCheckAPIView(generics.ListAPIView):
+    authentication_classes = []
+    permission_classes     = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        return Response(
+            {"status": "✅ ok", "message": "🏃‍♀️‍➡️ service is running"},
+            status=status.HTTP_200_OK
+        )   

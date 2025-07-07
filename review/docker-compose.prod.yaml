@@ -1,0 +1,7 @@
+services:
+  shop_review:
+    container_name: shop_review
+    build: .
+    image: tataran/drfshop_review:0.0.2
+    ports:
+      - "8007:8000"

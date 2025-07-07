@@ -5,7 +5,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.forms import model_to_dict
 from django.views.generic import TemplateView
 from rest_framework import exceptions, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -319,6 +320,16 @@ class VerifyAccountAPIView(APIView):
         
         return Response({"message": "Account Verified Successfully"}, status=status.HTTP_202_ACCEPTED)
     
+class HealthCheckAPIView(ListAPIView):
+    authentication_classes = []
+    permission_classes     = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        return Response(
+            {"status": "✅ ok", "message": "🏃‍♀️‍➡️ service is running"},
+            status=status.HTTP_200_OK
+        )
+        
 class RegisterPageView(TemplateView):
     template_name = "auth/register.html"
 

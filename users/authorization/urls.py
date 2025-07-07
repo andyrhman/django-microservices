@@ -1,6 +1,6 @@
 from django.urls import path
 
-from authorization.views import BulkUsersAPIView, LoginAPIView, LogoutAPIView, RegisterAPIView, TotalUsersAPIView, UpdateInfoAPIView, UpdatePasswordAPIView, UserAPIView,UsersAPIView 
+from authorization.views import BulkUsersAPIView, HealthCheckAPIView, LoginAPIView, LogoutAPIView, RegisterAPIView, TotalUsersAPIView, UpdateInfoAPIView, UpdatePasswordAPIView, UserAPIView,UsersAPIView 
 
 urlpatterns = [
     path("register", RegisterAPIView.as_view(), name='api-register'),
@@ -13,4 +13,5 @@ urlpatterns = [
     path("logout", LogoutAPIView.as_view(), name='api-logout'),
     path("info", UpdateInfoAPIView.as_view(), name='api-update-info'),
     path("password", UpdatePasswordAPIView.as_view(), name='api-update-password'),
+    path("health", HealthCheckAPIView.as_view(), name='api-health-check'),
 ]

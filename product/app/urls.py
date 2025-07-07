@@ -20,8 +20,8 @@ from rest_framework import status
 from rest_framework.exceptions import JsonResponse
 
 urlpatterns = [
-    path('api/admin/products/', include(('core.urls_admin', 'product'), namespace='admin_product')),
-    path('api/products/', include(('core.urls', 'product'), namespace='user_product')),
+    path('api/admin/', include(('core.urls_admin', 'product'), namespace='admin_product')),
+    path('api/', include(('core.urls', 'product'), namespace='user_product')),
 ]
 
 def custom_404(request, exception):

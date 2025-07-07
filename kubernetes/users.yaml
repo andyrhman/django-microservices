@@ -20,11 +20,23 @@ spec:
         - envFrom:
             - secretRef:
                 name: shop-users-env
-          image: ghcr.io/andyrhman/drfshop_users:0.0.3
+          image: ghcr.io/andyrhman/drfshop_users:0.0.4
           name: shop-users
           ports:
             - containerPort: 8000
               protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /api/user/health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/user/health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
           resources:
             requests:
               cpu: "250m"
@@ -32,6 +44,7 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
+      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service

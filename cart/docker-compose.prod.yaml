@@ -1,0 +1,9 @@
+
+services:
+  shop_cart:
+    container_name: shop_cart
+    build: .
+    image: tataran/drfshop_cart:0.0.1
+    ports:
+      - "8005:8000"
+

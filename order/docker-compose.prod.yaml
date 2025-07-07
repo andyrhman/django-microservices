@@ -1,0 +1,9 @@
+
+services:
+  shop_order:
+    container_name: shop_order
+    build: .
+    image: tataran/drfshop_order:0.0.1
+    ports:
+      - "8006:8000"
+

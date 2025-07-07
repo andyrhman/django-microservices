@@ -19,8 +19,8 @@ from django.urls import include, path
 from rest_framework import status
 
 urlpatterns = [
-    path('api/admin/carts/', include(('core.urls_admin', 'cart'), namespace='admin_cart')),   
-    path('api/carts/', include(('core.urls', 'cart'), namespace='user_cart')),   
+    path('api/admin/', include(('core.urls_admin', 'cart'), namespace='admin_cart')),   
+    path('api/', include(('core.urls', 'cart'), namespace='user_cart')),   
 ]
 
 def custom_404(request, exception):

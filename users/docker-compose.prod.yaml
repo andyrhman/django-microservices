@@ -2,8 +2,6 @@ services:
   shop_users:
     container_name: shop_users
     build: .
-    image: tataran/drfshop_users:0.0.3
-    env_file:
-      - .env
+    image: tataran/drfshop_users:0.0.4
     ports:
       - 8001:8000

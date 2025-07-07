@@ -30,7 +30,10 @@ kubectl delete pods --all # All pods
 Creating secret
 
 ```bash
-kubectl create secret generic <secret name> --from-literal=KAFKA_BROKERS=test444:90921 --from-literal=KAFKA_USERNAME=test123 --from-literal=KAFKA_PASSWORD=44444
+kubectl create secret generic <secret name> \
+  --from-literal=KAFKA_BROKERS=test444:90921 \ 
+  --from-literal=KAFKA_USERNAME=test123 \ 
+  --from-literal=KAFKA_PASSWORD=44444
 ```
 
 Deleting secret

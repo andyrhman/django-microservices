@@ -1,0 +1,9 @@
+
+services:
+  shop_category:
+    container_name: shop_category
+    build: .
+    image: tataran/drfshop_category:0.0.1
+    ports:
+      - "8003:8000"
+
