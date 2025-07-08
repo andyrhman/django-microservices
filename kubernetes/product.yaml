@@ -20,7 +20,7 @@ spec:
         - envFrom:
             - secretRef:
                 name: shop-product-env
-          image: ghcr.io/andyrhman/drfshop_product:0.0.1
+          image: ghcr.io/andyrhman/drfshop_product:0.0.2
           name: shop-product
           ports:
             - containerPort: 8000

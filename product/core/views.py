@@ -264,12 +264,25 @@ class ProductVariantsAPIView(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
     
 class ProductAPIView(generics.RetrieveAPIView):
+    authentication_classes = []
+    permission_classes     = [AllowAny]   
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
     lookup_field = 'slug'
-    
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        category_id = str(instance.category)
+
+        token = request.COOKIES.get('user_session')
+        cookies = {'user_session': token} if token else None
+        cat = CategoryService.list_by_ids([category_id], cookies=cookies)[0]
+
+        cats_map = {cat['id']: {'id': cat['id'], 'name': cat['name']}}
+        serializer = self.get_serializer(instance, context={'categories_map': cats_map})
+
+        return Response(serializer.data)
     
 class ProductIdAPIView(generics.RetrieveAPIView):
     serializer_class = ProductSerializer
